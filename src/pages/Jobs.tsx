@@ -1,4 +1,4 @@
-import { Brain, Building2, ChevronsLeftRightEllipsis, Clock, Database, Laptop, LayoutPanelLeft, MapPin, MapPinned, MoveRight, Search, TabletSmartphone, Timer, UsersRound } from "lucide-react"
+import { Brain, Building2, ChevronsLeftRightEllipsis, Clock, Database, Laptop, LayoutPanelLeft, MoveRight, Search, TabletSmartphone, Timer, UsersRound } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import type { JobListCardType } from "../types/context/Job.context"

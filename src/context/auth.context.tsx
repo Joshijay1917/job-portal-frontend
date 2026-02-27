@@ -3,7 +3,6 @@ import type { LoginFormValues, RegisterFormValues, User } from "../types/auth";
 import type { AuthContextType } from "../types/context/auth.context";
 import { useAsync } from "../hooks/useAsync";
 import { logIn, register, userDetails } from "../services/authService";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext<AuthContextType | null>(null)
