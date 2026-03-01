@@ -1,4 +1,10 @@
-export const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000/api'
+export const API_BASE_URL = function getBackedUrl(): string {
+    if (import.meta.env.DEV) {
+        return import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000/api'
+    }
+
+    return import.meta.env.VITE_BACKEND_URL || 'https://job-portal-backend-staging.onrender.com/api'
+}
 
 export const Categories = {
     Sde: 'Software Developer',
