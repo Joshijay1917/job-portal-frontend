@@ -74,7 +74,7 @@ export function Jobs() {
                             </div>
                         ))}
                     </div>
-                    <div className="flex px-3 py-6 items-center justify-center gap-2 mt-6">
+                    {!loading && <div className="flex px-3 py-6 items-center justify-center gap-2 mt-6">
                         <button
                             onClick={() => goTo(page - 1)}
                             disabled={page === 1}
@@ -103,7 +103,7 @@ export function Jobs() {
                         >
                             Next
                         </button>
-                    </div>
+                    </div>}
                 </div>
 
                 <div className="hidden md:block">
