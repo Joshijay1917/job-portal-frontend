@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form"
-import InputField from "../../../components/InputField"
+import { InputField } from "../../../components/InputField"
 import { useUser } from "../../../context/user.context"
 import { useEffect, type Dispatch, type SetStateAction } from "react"
-import Loader from "../../../components/Loader"
+import { Loader } from "../../../components/Loader"
 import type { CandidateForm } from "../../../types/context/user.context"
 
-function CandidateProfile({ EditMode, setEditMode }: { EditMode: boolean, setEditMode: Dispatch<SetStateAction<boolean>> }) {
+export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean, setEditMode: Dispatch<SetStateAction<boolean>> }) {
   const { user, loading, getUser, updateUser } = useUser()
   const {
     register,
@@ -16,19 +16,18 @@ function CandidateProfile({ EditMode, setEditMode }: { EditMode: boolean, setEdi
   })
 
   const onSubmit = async (data: CandidateForm) => {
-    console.log("Submitted:", data)
     const res = await updateUser(data)
-    if(res) {
+    if (res) {
       setEditMode(false)
     }
   }
 
   useEffect(() => {
-        getUser()
-    }, [])
+    getUser()
+  }, [])
 
   return loading ? <Loader /> : (
-    <div className="grid grid-cols-3 gap-10 px-10">
+    <div className="grid md:grid-cols-3 gap-10 px-4 md:px-10 bg-white py-10">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="col-span-2 space-y-5"
@@ -37,7 +36,7 @@ function CandidateProfile({ EditMode, setEditMode }: { EditMode: boolean, setEdi
         {/* Full Name */}
         <InputField
           label="Full Name"
-          disabled={!EditMode}
+          disabled={!editMode}
           register={register("fname", {
             required: "Full Name is required"
           })}
@@ -60,11 +59,11 @@ function CandidateProfile({ EditMode, setEditMode }: { EditMode: boolean, setEdi
 
         {/* Description */}
         <div>
-          <label className="block mb-1 font-medium">Description</label>
+          <label htmlFor="description" className="block mb-1 font-medium">Description</label>
           <textarea
-            disabled={!EditMode}
+            disabled={!editMode}
             {...register("description")}
-            className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2 bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
             rows={4}
           />
         </div>
@@ -73,7 +72,7 @@ function CandidateProfile({ EditMode, setEditMode }: { EditMode: boolean, setEdi
         <InputField
           label="Experience (Years)"
           type="number"
-          disabled={!EditMode}
+          disabled={!editMode}
           register={register("experience_years", {
             valueAsNumber: true,
             min: { value: 0, message: "Cannot be negative" }
@@ -86,7 +85,7 @@ function CandidateProfile({ EditMode, setEditMode }: { EditMode: boolean, setEdi
           <InputField
             label="Expected Salary Min"
             type="number"
-            disabled={!EditMode}
+            disabled={!editMode}
             register={register("expected_salary.min", {
               valueAsNumber: true
             })}
@@ -96,7 +95,7 @@ function CandidateProfile({ EditMode, setEditMode }: { EditMode: boolean, setEdi
           <InputField
             label="Expected Salary Max"
             type="number"
-            disabled={!EditMode}
+            disabled={!editMode}
             register={register("expected_salary.max", {
               valueAsNumber: true
             })}
@@ -105,18 +104,18 @@ function CandidateProfile({ EditMode, setEditMode }: { EditMode: boolean, setEdi
         </div>
 
         {/* Resume Upload */}
-        {EditMode && (
+        {editMode && (
           <div>
-            <label className="block mb-1 font-medium">Resume</label>
+            <label htmlFor="resume" className="block mb-1 font-medium">Resume</label>
             <input
               type="file"
-              className="w-full px-4 py-2 border rounded-xl"
+              className={`w-full px-4 py-2 ${!editMode ? 'bg-gray-100' : 'bg-white'} border border-gray-300`}
             />
           </div>
         )}
 
         {/* Submit */}
-        {EditMode && (
+        {editMode && (
           <button
             type="submit"
             className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition"
@@ -128,5 +127,3 @@ function CandidateProfile({ EditMode, setEditMode }: { EditMode: boolean, setEdi
     </div>
   )
 }
-
-export default CandidateProfile

@@ -13,7 +13,7 @@ export async function getAllJobPosts(page: number) {
 }
 
 export async function getJobData(id: string) {
-    const response = await api.post('/job/details', { id })
+    const response = await api.get(`/job/details/${id}`)
     return response
 }
 

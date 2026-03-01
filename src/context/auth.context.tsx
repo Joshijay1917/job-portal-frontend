@@ -2,8 +2,10 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import type { LoginFormValues, RegisterFormValues, User } from "../types/auth";
 import type { AuthContextType } from "../types/context/auth.context";
 import { useAsync } from "../hooks/useAsync";
-import { logIn, register, userDetails } from "../services/authService";
+import { logIn, logoutUser, register, userDetails } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../Routes";
+import { logger } from "../utils/logger";
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
@@ -26,48 +28,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const loginUser = async (data: LoginFormValues) => {
         const result = await run(logIn(data))
 
-        if(!result) {
-            // toast.error('Failed to login user!')
-            return;
-        }
+        if (!result) return;
+
         const payload = result.data.data
-        console.log(payload)
+        logger.log(payload)
 
         localStorage.setItem("accessToken", payload.accessToken)
         setUser(payload.user)
         setIsAuthenticated(true)
-        navigate('/')
+        navigate(ROUTES.HOME)
     }
 
     const registerUser = async (data: RegisterFormValues) => {
         const result = await run(register(data))
 
-        if(!result) {
-            // toast.error('Failed to register user!')
+        if (!result) {
             return;
         }
 
-        navigate('/login')
+        navigate(ROUTES.LOGIN)
+    }
+
+    const logOutUser = async () => {
+        const res = await run(logoutUser())
+
+        if (!res) return;
+
+        setUser(null)
+        setIsAuthenticated(false)
+        localStorage.removeItem('accessToken')
     }
 
     const restoreSession = async () => {
         setIsAuthenticated(false)
-        const state = localStorage.getItem('authstate')
-        if (state === 'Done') {
-            setIsAuthenticated(true)
-        }
-        console.log('REFRESH SESSION!!!!!!!')
         const res = await run(userDetails())
-        if(!res) {
+        if (!res) {
             setIsAuthenticated(false)
-            // toast.error("User session expired!")
-            localStorage.setItem('authstate', 'Not Verified!')
             return
         }
         const user = res.data.data
         setUser(user)
         setIsAuthenticated(true)
-        localStorage.setItem('authstate', 'Done')
     }
 
     useEffect(() => {
@@ -79,6 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated,
         loginUser,
         registerUser,
+        logOutUser,
         loading,
         error
     }

@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
+import { Category, JobType } from '../../utils/constants'
 
 export type JobListCardType = {
     _id: string;
@@ -7,8 +8,8 @@ export type JobListCardType = {
     title: string;
     category: Category;
     type: JobType;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export type JobContext = {
@@ -24,9 +25,4 @@ export enum Category {
     Aiml = 'AI/ML',
     Internship = 'Internship',
     Remote = 'Remote Job'
-}
-
-export enum JobType {
-    Ftype = 'Full time',
-    Ptype = 'Part time'
 }

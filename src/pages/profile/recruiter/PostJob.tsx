@@ -1,12 +1,11 @@
 import { useForm } from "react-hook-form"
 import type { PostJobType } from "../../../types/dashboard/recruiter"
-import InputField from "../../../components/InputField"
-import { categories } from "./RecruiterProfile"
-import { JobType } from "../../../utils/constants"
+import { InputField } from "../../../components/InputField"
+import { categories, JobType } from "../../../utils/constants"
 import { useRecruiter } from "../../../hooks/useRecruiter"
-import Loader from "../../../components/Loader"
+import { Loader } from "../../../components/Loader"
 
-function PostJob() {
+export function PostJob() {
     const { postJob, loading, error } = useRecruiter()
     const {
         register,
@@ -25,12 +24,11 @@ function PostJob() {
                 : []
         }
 
-        console.log("Submitted:", formattedData)
         await postJob(formattedData)
     }
 
     return loading ? <Loader /> : error ? <span>{error}</span> : (
-        <div className="p-10">
+        <div className="p-10 bg-white">
             <h1 className="text-3xl font-bold mb-6">Post Job</h1>
 
             <form
@@ -48,10 +46,11 @@ function PostJob() {
 
                 {/* Description */}
                 <div>
-                    <label className="block mb-1 font-medium">
+                    <label htmlFor="description" className="block mb-1 font-medium">
                         Job Description
                     </label>
                     <textarea
+                        id="description"
                         {...register("description", {
                             required: "Description is required"
                         })}
@@ -65,10 +64,11 @@ function PostJob() {
 
                 {/* Responsibilities */}
                 <div>
-                    <label className="block mb-1 font-medium">
+                    <label htmlFor="responsibilities" className="block mb-1 font-medium">
                         Responsibilities (one per line)
                     </label>
                     <textarea
+                        id="responsibilities"
                         {...register("responsibilities")}
                         className="w-full bg-gray-100 border border-gray-300 px-4 py-2"
                         rows={4}
@@ -77,10 +77,11 @@ function PostJob() {
 
                 {/* Skills */}
                 <div>
-                    <label className="block mb-1 font-medium">
+                    <label htmlFor="skills" className="block mb-1 font-medium">
                         Skills (one per line)
                     </label>
                     <textarea
+                        id="skills"
                         {...register("skills")}
                         className="w-full bg-gray-100 border border-gray-300 px-4 py-2"
                         rows={4}
@@ -131,28 +132,31 @@ function PostJob() {
 
                 {/* Category */}
                 <div>
-                    <label className="block mb-1 font-medium">
+                    <label htmlFor="category" className="block mb-1 font-medium">
                         Category
                     </label>
                     <select
+                        id="category"
                         {...register("category", {
-                            required: "Category required"
+                            required: "Category is required"
                         })}
                         className="w-full bg-gray-100 border border-gray-300 px-4 py-2"
                     >
                         <option value="">Select category</option>
                         {categories.map(cat => (
-                            <option value={cat.name}>{cat.name}</option>
+                            <option key={cat.slug} value={cat.name}>{cat.name}</option>
                         ))}
                     </select>
+                    {errors.category && <p className="text-sm text-red-500 mt-1">{errors.category.message}</p>}
                 </div>
 
                 {/* Job Type */}
                 <div>
-                    <label className="block mb-1 font-medium">
+                    <label htmlFor="type" className="block mb-1 font-medium">
                         Job Type
                     </label>
                     <select
+                        id="type"
                         {...register("type", {
                             required: "Job type required"
                         })}
@@ -160,9 +164,10 @@ function PostJob() {
                     >
                         <option value="">Select type</option>
                         {Array.from([JobType.fulltime, JobType.parttime]).map(type => (
-                            <option>{type}</option>
+                            <option key={type} value={type}>{type}</option>
                         ))}
                     </select>
+                    {errors.type && <p className="text-sm text-red-500 mt-1">{errors.type.message}</p>}
                 </div>
 
                 {/* Location */}
@@ -182,5 +187,3 @@ function PostJob() {
         </div>
     )
 }
-
-export default PostJob

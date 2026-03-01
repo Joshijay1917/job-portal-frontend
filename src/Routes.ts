@@ -1,0 +1,17 @@
+export const ROUTES = {
+    HOME: "/",
+    LOGIN: "/login",
+    REGISTER: "/signup",
+    JOBS: "/jobs",
+    JOB_SEARCH: (search: string) => `/jobs?search=${search}`,
+    JOB_DETAIL: (id: string) => `/jobs/${id}`,
+    CANDIDATE_DASHBOARD: "/dashboard/candidate",
+    CANDIDATE_APPLICATIONS: "/dashboard/candidate/applications",
+    CANDIDATE_SAVED_JOBS: "/dashboard/candidate/saved-jobs",
+    CANDIDATE_SETTINGS: "/dashboard/candidate/settings",
+    RECRUITER_DASHBOARD: "/dashboard/recruiter",
+    RECRUITER_POST_JOB: "/dashboard/recruiter/post-job",
+    RECRUITER_JOBS: "/dashboard/recruiter/jobs",
+    RECRUITER_CANDIDATES: "/dashboard/recruiter/candidates",
+    RECRUITER_SETTINGS: "/dashboard/recruiter/settings",
+}

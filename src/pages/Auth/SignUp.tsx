@@ -4,8 +4,9 @@ import { Link } from "react-router-dom"
 import { Eye, EyeOff } from "lucide-react"
 import { Role, type RegisterFormValues } from "../../types/auth.d"
 import { useAuth } from "../../context/auth.context"
+import { ROUTES } from "../../Routes"
 
-function Login() {
+export function SignUp() {
     const { registerUser, loading, error } = useAuth()
     const [showPassword, setShowPassword] = useState(false)
 
@@ -14,7 +15,7 @@ function Login() {
         handleSubmit,
         watch,
         formState: { errors }
-    } = useForm<RegisterFormValues>({ defaultValues: { "role": Role.Candidate }})
+    } = useForm<RegisterFormValues>({ defaultValues: { "role": Role.Candidate } })
 
     const onSubmit = async (data: RegisterFormValues) => {
         await registerUser(data)
@@ -42,38 +43,64 @@ function Login() {
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
                         {/* Username */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                {watch('role') === 'recruiter' ? 'Owner name' : 'Full Name'}
-                            </label>
-                            <input
-                                {...register(watch('role') === 'recruiter' ? "owner" : "fname", {
-                                    required: "Name is required",
-                                    minLength: {
-                                        value: 3,
-                                        message: "Minimum 3 characters required"
-                                    }
-                                })}
-                                className={`w-full h-11 px-4 border rounded-lg focus:outline-none focus:ring-2 transition
+                        {watch('role') === Role.Candidate ?
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Full Name
+                                </label>
+                                <input
+                                    {...register("fname", {
+                                        required: "Full Name is required",
+                                        minLength: {
+                                            value: 3,
+                                            message: "Minimum 3 characters required"
+                                        }
+                                    })}
+                                    className={`w-full h-11 px-4 border rounded-lg focus:outline-none focus:ring-2 transition
                   ${errors.fname
-                                        ? "border-red-500 focus:ring-red-200"
-                                        : "border-gray-300 focus:ring-blue-200"
-                                    }`}
-                                placeholder="Enter your name"
-                            />
-                            {errors.fname && (
-                                <p className="text-sm text-red-500 mt-1">
-                                    {errors.fname.message}
-                                </p>
-                            )}
-                        </div>
+                                            ? "border-red-500 focus:ring-red-200"
+                                            : "border-gray-300 focus:ring-blue-200"
+                                        }`}
+                                    placeholder="Enter your fullname"
+                                />
+                                {errors.fname && (
+                                    <p className="text-sm text-red-500 mt-1">
+                                        {errors.fname.message}
+                                    </p>
+                                )}
+                            </div>
+                            : <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Owner name
+                                </label>
+                                <input
+                                    {...register("owner", {
+                                        required: "Owner name is required",
+                                        minLength: {
+                                            value: 3,
+                                            message: "Minimum 3 characters required"
+                                        }
+                                    })}
+                                    className={`w-full h-11 px-4 border rounded-lg focus:outline-none focus:ring-2 transition
+                  ${errors.owner
+                                            ? "border-red-500 focus:ring-red-200"
+                                            : "border-gray-300 focus:ring-blue-200"
+                                        }`}
+                                    placeholder="Enter owner name"
+                                />
+                                {errors.owner && (
+                                    <p className="text-sm text-red-500 mt-1">
+                                        {errors.owner.message}
+                                    </p>
+                                )}
+                            </div>}
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Email
                             </label>
                             <input
-                                {...register("email", {required: "Email is required"})}
+                                {...register("email", { required: "Email is required" })}
                                 className={`w-full h-11 px-4 border rounded-lg focus:outline-none focus:ring-2 transition
                   ${errors.email
                                         ? "border-red-500 focus:ring-red-200"
@@ -159,9 +186,9 @@ function Login() {
                                 Company Name
                             </label>
                             <input
-                                {...register("cname", {required: "Company name is required"})}
+                                {...register("cname", { required: "Company name is required" })}
                                 className={`w-full h-11 px-4 border rounded-lg focus:outline-none focus:ring-2 transition
-                  ${errors.email
+                  ${errors.cname
                                         ? "border-red-500 focus:ring-red-200"
                                         : "border-gray-300 focus:ring-blue-200"
                                     }`}
@@ -194,7 +221,7 @@ function Login() {
                     <p className="text-center text-gray-500 mt-6">
                         Already have an account?{" "}
                         <Link
-                            to="/login"
+                            to={ROUTES.LOGIN}
                             className="text-blue-600 font-medium hover:underline"
                         >
                             Sign In
@@ -205,5 +232,3 @@ function Login() {
         </div>
     )
 }
-
-export default Login

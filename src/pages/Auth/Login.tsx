@@ -1,11 +1,12 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 import { Eye, EyeOff } from "lucide-react"
 import type { LoginFormValues } from "../../types/auth"
 import { useAuth } from "../../context/auth.context"
+import { ROUTES } from "../../Routes"
 
-function Login() {
+export function Login() {
   const navigate = useNavigate()
   const { loginUser, loading, error, isAuthenticated } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
@@ -20,12 +21,16 @@ function Login() {
     await loginUser(data)
   }
 
-  isAuthenticated && navigate('/')
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(ROUTES.HOME)
+    }
+  }, [isAuthenticated])
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-linear-to-br from-gray-100 to-gray-200 px-4">
       <div className="bg-white shadow-2xl rounded-2xl overflow-hidden max-w-4xl w-full flex">
-        
+
         {/* Left Side Image */}
         <div className="hidden md:flex w-1/2 bg-blue-50 items-center justify-center p-10">
           <img
@@ -57,8 +62,8 @@ function Login() {
                   }
                 })}
                 className={`w-full h-11 px-4 border rounded-lg focus:outline-none focus:ring-2 transition
-                  ${errors.email 
-                    ? "border-red-500 focus:ring-red-200" 
+                  ${errors.email
+                    ? "border-red-500 focus:ring-red-200"
                     : "border-gray-300 focus:ring-blue-200"
                   }`}
                 placeholder="Enter your username"
@@ -87,8 +92,8 @@ function Login() {
                     }
                   })}
                   className={`w-full h-11 px-4 pr-12 border rounded-lg focus:outline-none focus:ring-2 transition
-                    ${errors.password 
-                      ? "border-red-500 focus:ring-red-200" 
+                    ${errors.password
+                      ? "border-red-500 focus:ring-red-200"
                       : "border-gray-300 focus:ring-blue-200"
                     }`}
                   placeholder="Enter your password"
@@ -129,7 +134,7 @@ function Login() {
           <p className="text-center text-gray-500 mt-6">
             Don't have an account?{" "}
             <Link
-              to="/signup"
+              to={ROUTES.REGISTER}
               className="text-blue-600 font-medium hover:underline"
             >
               Sign up
@@ -140,5 +145,3 @@ function Login() {
     </div>
   )
 }
-
-export default Login

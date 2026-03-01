@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { logger } from "../utils/logger";
 
 export const useAsync = () => {
   const [loading, setLoading] = useState(false);
@@ -11,18 +13,25 @@ export const useAsync = () => {
       setError(null);
       const data = await promise;
       return data;
-    } catch (err: any) {
-      const message =
-        err?.response?.data?.message || // backend message
-        err?.response?.data?.error || // alternative backend key
-        err?.message || // axios message
-        "Something went wrong";
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const message =
+          err?.response?.data?.message || // backend message
+          err?.response?.data?.error || // alternative backend key
+          err?.message || // axios message
+          "Something went wrong";
 
-      console.log("ERROR:", message);
-      toast.error(message)
+        logger.error("ERROR:", message);
+        toast.error(message)
 
-      setError(message);
-
+        setError(message);
+      } else if (err instanceof Error) {
+        logger.error(err.message)
+        toast.error(err.message)
+      } else {
+        logger.error("Unexpected error:", err)
+        toast.error("Something went wrong")
+      }
       return null;
     } finally {
       setLoading(false);

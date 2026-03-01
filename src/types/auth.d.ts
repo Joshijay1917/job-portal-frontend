@@ -1,5 +1,5 @@
 export enum Role {
-    Recruter = 'recruiter',
+    Recruiter = 'recruiter',
     Candidate = 'candidate'
 }
 
@@ -24,8 +24,13 @@ type User = {
     email_verified: boolean;
 }
 
+type AuthBody = {
+    user: User;
+    accessToken?: string;
+}
+
 type AuthResponse = {
     statusCode: number;
-    data: Object;
+    data: AuthBody;
     message: string;
 }

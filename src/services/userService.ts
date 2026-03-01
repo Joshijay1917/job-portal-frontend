@@ -1,4 +1,5 @@
 import type { CandidateForm, RecruiterForm } from "../types/context/user.context";
+import type { Status } from "../types/hooks/useRecruiter";
 import api from "./api";
 
 export async function getUserDetails() {
@@ -21,8 +22,8 @@ export async function getAppliedJobs() {
     return response
 }
 
-export async function getAllApplicants(recruiterId: string) {
-    const response = await api.get(`/user/applications?recruiterId=${recruiterId}`)
+export async function getAllApplicants() {
+    const response = await api.get('/user/applications')
     return response
 }
 
@@ -31,7 +32,7 @@ export async function getApplicationDetails(applicationId: string) {
     return response
 }
 
-export async function updateAppStatus(appId: string, status: string) {
+export async function updateAppStatus(appId: string, status: Status) {
     const response = await api.post(`/user/applications/update`, { appId, status })
     return response
 }

@@ -11,7 +11,7 @@ const userContext = createContext<userContextType | null>(null)
 export const useUser = () => {
     const context = useContext(userContext)
 
-    if(!context) {
+    if (!context) {
         throw Error("User context must be wrapped inside userContext!")
     }
 
@@ -20,19 +20,19 @@ export const useUser = () => {
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const { run, loading, error } = useAsync()
-    const [user, setuser] = useState<Recruiter | Candidate>()
+    const [user, setUser] = useState<Recruiter | Candidate>()
 
-    const getUser = async() => {
+    const getUser = async () => {
         const res = await run(getUserDetails())
-        if(!res) return;
+        if (!res) return;
 
-        setuser(res.data.data)
+        setUser(res.data.data)
     }
 
-    const updateUser = async(user: RecruiterForm | CandidateForm) => {
-        const res = run(updateDetails(user))
+    const updateUser = async (user: RecruiterForm | CandidateForm) => {
+        const res = await run(updateDetails(user))
 
-        if(!res) return false;
+        if (!res) return false;
 
         toast.success('Profile updated!')
         return true

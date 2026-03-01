@@ -1,5 +1,3 @@
-// import { Category, type JobListCardType } from "../types/context/Job.context";
-
 export const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000/api'
 
 export const Categories = {
@@ -17,25 +15,10 @@ export const JobType = {
     parttime: 'Part Time'
 }
 
-// export const mockJobs: JobListCardType[] = [
-//     {
-//         _id: '1',
-//         recruiterId: { cname: 'Google' },
-//         logo_url: 'google.com',
-//         title: 'Mern Developer',
-//         category: Category.Sde,
-//         type: "Full Time",
-//         createdAt: new Date("2026-02-15"),
-//         updatedAt: new Date("2026-02-19")
-//     },
-//     {
-//         _id: '2',
-//         recruiterId: { cname: 'Amazon' },
-//         logo_url: 'amazon.in',
-//         title: 'Java Developer',
-//         category: Category.Sde,
-//         type: 'Part Time',
-//         createdAt: new Date("2026-02-18"),
-//         updatedAt: new Date("2026-02-18")
-//     }
-// ]
+export const categories = [{ name: "Software Developer", slug: 'softwaredeveloper' },
+{ name: "UI/UX", slug: 'uiux' },
+{ name: "Data Science", slug: 'datascience' },
+{ name: "Mobile Dev", slug: 'mobiledev' },
+{ name: "AI/ML", slug: 'aiml' },
+{ name: "Internships", slug: 'internships' },
+{ name: "Remote Jobs", slug: 'remotejobs' }]
