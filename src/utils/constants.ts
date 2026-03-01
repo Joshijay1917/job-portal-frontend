@@ -1,9 +1,7 @@
-export const API_BASE_URL = function getBackedUrl(): string {
-    if (import.meta.env.DEV) {
-        return import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000/api'
-    }
+export const API_BASE_URL = import.meta.env.VITE_BACKEND_URL as string
 
-    return import.meta.env.VITE_BACKEND_URL || 'https://job-portal-backend-staging.onrender.com/api'
+if (!API_BASE_URL) {
+    throw new Error("VITE_BACKEND_URL is not defined")
 }
 
 export const Categories = {
