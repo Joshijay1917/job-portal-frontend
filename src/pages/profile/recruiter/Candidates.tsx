@@ -19,7 +19,7 @@ export function Candidates() {
 
     return (
         <div className='md:p-10 bg-gray-100'>
-            <h1 className="text-3xl font-bold mb-6">Candidates</h1>
+            <h1 className="text-xl md:text-3xl font-bold mb-6">Candidates</h1>
 
             <div className="flex flex-col gap-5">
                 {applications && applications.map(app => (

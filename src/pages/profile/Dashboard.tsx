@@ -20,19 +20,19 @@ export function Dashboard() {
     const { user } = useAuth()
 
     return (
-        <div className='p-10 bg-gray-100 md:px-30 min-h-screen'>
+        <div className='p-4 md:p-10 bg-gray-100 md:px-30 min-h-screen'>
             <div className='w-full flex justify-between'>
                 <div className='flex gap-5'>
-                    <img width={100} height={100} src="/profile.png" alt="profile_image" />
+                    <img className='w-[70px] h-[70px] md:w-[100px] md:h-[100px] rounded-full' src="/profile.png" alt="profile_image" />
                     <div>
-                        <h1 className='text-4xl mb-3 font-bold'>Profile</h1>
-                        <p className='text-gray-500'>{user?.role.toLocaleUpperCase()}</p>
-                        <p className='text-gray-500'>{user?.email}</p>
+                        <h1 className='text-2xl md:text-4xl md:mb-3 font-bold'>Profile</h1>
+                        <p className='text-sm md:text-base text-gray-500'>{user?.role.toLocaleUpperCase()}</p>
+                        <p className='text-sm md:text-base text-gray-500'>{user?.email}</p>
                     </div>
                 </div>
-                <div className='flex gap-2 h-1/2'>
-                    <span className='flex bg-red-400 text-white p-3 rounded-xl gap-2'><BadgeX /></span>
-                    <button onClick={() => setEditMode(!editMode)} className='text-white bg-blue-600 hover:bg-gray-800 hover:cursor-pointer p-3 rounded-xl'><PencilLine /></button>
+                <div className='flex gap-2 h-fit md:h-1/2'>
+                    <span className='flex bg-red-400 text-white p-2 md:p-3 rounded-xl gap-2'><BadgeX /></span>
+                    <button onClick={() => setEditMode(!editMode)} className='text-white bg-blue-600 hover:bg-gray-800 hover:cursor-pointer p-2 md:p-3 rounded-xl'><PencilLine /></button>
                 </div>
             </div>
 

@@ -40,7 +40,7 @@ export function DashboardTabs() {
                         <span
                             key={item.path}
                             onClick={() => navigate(item.path)}
-                            className={`text-center cursor-pointer pb-3 transition-colors duration-200
+                            className={`text-center text-xs md:text-base cursor-pointer pb-3 transition-colors duration-200
                             ${index === activeIndex
                                     ? "text-black font-semibold"
                                     : "text-gray-400"

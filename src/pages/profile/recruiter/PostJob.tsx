@@ -28,8 +28,8 @@ export function PostJob() {
     }
 
     return loading ? <Loader /> : error ? <span>{error}</span> : (
-        <div className="p-10 bg-white">
-            <h1 className="text-3xl font-bold mb-6">Post Job</h1>
+        <div className="md:p-10 p-4 bg-white">
+            <h1 className="text-xl md:text-3xl font-bold mb-6">Post Job</h1>
 
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -54,7 +54,7 @@ export function PostJob() {
                         {...register("description", {
                             required: "Description is required"
                         })}
-                        className="w-full bg-gray-100 border border-gray-300 px-4 py-2"
+                        className="w-full bg-white border border-gray-300 px-4 py-2"
                         rows={4}
                     />
                     <p className="text-red-500 text-sm">
@@ -70,7 +70,7 @@ export function PostJob() {
                     <textarea
                         id="responsibilities"
                         {...register("responsibilities")}
-                        className="w-full bg-gray-100 border border-gray-300 px-4 py-2"
+                        className="w-full bg-white border border-gray-300 px-4 py-2"
                         rows={4}
                     />
                 </div>
@@ -83,7 +83,7 @@ export function PostJob() {
                     <textarea
                         id="skills"
                         {...register("skills")}
-                        className="w-full bg-gray-100 border border-gray-300 px-4 py-2"
+                        className="w-full bg-white border border-gray-300 px-4 py-2"
                         rows={4}
                     />
                 </div>
@@ -140,7 +140,7 @@ export function PostJob() {
                         {...register("category", {
                             required: "Category is required"
                         })}
-                        className="w-full bg-gray-100 border border-gray-300 px-4 py-2"
+                        className="w-full bg-white border border-gray-300 px-4 py-2"
                     >
                         <option value="">Select category</option>
                         {categories.map(cat => (
@@ -160,7 +160,7 @@ export function PostJob() {
                         {...register("type", {
                             required: "Job type required"
                         })}
-                        className="w-full bg-gray-100 border border-gray-300 px-4 py-2"
+                        className="w-full bg-white border border-gray-300 px-4 py-2"
                     >
                         <option value="">Select type</option>
                         {Array.from([JobType.fulltime, JobType.parttime]).map(type => (
