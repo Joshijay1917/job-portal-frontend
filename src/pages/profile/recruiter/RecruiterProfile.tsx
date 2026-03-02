@@ -35,10 +35,12 @@ export function RecruiterProfile({ editMode, setEditMode }: { editMode: boolean,
     }, [user, reset])
 
     return loading ? <Loader /> : (
-        <div className="grid md:grid-cols-3 gap-10 md:px-10 px-4 bg-white py-10">
+        <div className="grid gap-10 md:px-10 px-4 bg-white py-10">
+            <h1 className="text-xl md:text-3xl font-bold">Profile</h1>
+
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="col-span-2 space-y-5"
+                className="space-y-5"
             >
 
                 {/* Company Name */}

@@ -1,9 +1,11 @@
 import { useState } from "react"
 import { Lock, Bell, Trash2, Eye, EyeOff } from "lucide-react"
 import { useAuth } from "../../../context/auth.context"
+import { useRecruiter } from "../../../hooks/useRecruiter"
 
 export function Settings() {
     const { logOutUser } = useAuth()
+    const { changePassword } = useRecruiter()
 
     // Change Password
     const [passwords, setPasswords] = useState({ current: "", newPass: "", confirm: "" })
@@ -21,7 +23,7 @@ export function Settings() {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
     const [deleteText, setDeleteText] = useState("")
 
-    const handlePasswordChange = (e: React.FormEvent) => {
+    const handlePasswordChange = async (e: React.FormEvent) => {
         e.preventDefault()
         setPasswordError(null)
 
@@ -35,7 +37,11 @@ export function Settings() {
             return
         }
 
-        setPasswords({ current: "", newPass: "", confirm: "" })
+        const res = await changePassword(passwords.current, passwords.newPass)
+
+        if (res) {
+            setPasswords({ current: "", newPass: "", confirm: "" })
+        }
     }
 
     const handleNotificationToggle = (key: keyof typeof notifications) => {
