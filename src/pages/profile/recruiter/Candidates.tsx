@@ -3,7 +3,7 @@ import { useRecruiter } from "../../../hooks/useRecruiter"
 import { Status } from "../../../types/hooks/useRecruiter.d"
 
 export function Candidates() {
-    const { applications, getAllCandidates, updateStatus } = useRecruiter()
+    const { applications, loading, getAllCandidates, updateStatus } = useRecruiter()
 
     useEffect(() => {
         getAllCandidates()
@@ -22,6 +22,7 @@ export function Candidates() {
             <h1 className="text-xl md:text-3xl font-bold mb-6">Candidates</h1>
 
             <div className="flex flex-col gap-5">
+                {!loading && applications.length === 0 && <span className="text-center">No candidates found!</span>}
                 {applications && applications.map(app => (
                     <div key={app._id} className="bg-white flex justify-between hover:shadow-2xl p-6 rounded-xl cursor-pointer shadow-md">
                         <div className="flex gap-3">

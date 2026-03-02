@@ -12,6 +12,11 @@ export async function updateDetails(data: CandidateForm | RecruiterForm) {
     return response
 }
 
+export async function changeUserPassword(currentPass: string, newPass: string) {
+    const response = await api.post('/user/change-password', { currentPass, newPass })
+    return response
+}
+
 export async function getAllPosts() {
     const response = await api.get('/user/posts')
     return response

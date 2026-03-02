@@ -10,6 +10,7 @@ export type useRecruiterType = {
     getPostedJobs: () => Promise<void>
     getAllCandidates: () => Promise<void>
     updateStatus: (appId: string, status: Status) => Promise<boolean>
+    changePassword: (currentPass: string, newPass: string) => Promise<boolean>
 }
 
 export type ApplicationType = {

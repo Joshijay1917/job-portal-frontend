@@ -5,8 +5,9 @@ import { PostJob } from "../services/jobService";
 import type { ApplicationType, Status, useRecruiterType } from "../types/hooks/useRecruiter";
 import { useState } from "react";
 import type { JobListCardType } from "../types/context/Job.context";
-import { getAllApplicants, getAllPosts, updateAppStatus } from "../services/userService";
+import { changeUserPassword, getAllApplicants, getAllPosts, updateAppStatus } from "../services/userService";
 import { ROUTES } from "../Routes";
+import toast from "react-hot-toast";
 
 export const useRecruiter = (): useRecruiterType => {
     const navigate = useNavigate();
@@ -47,5 +48,15 @@ export const useRecruiter = (): useRecruiterType => {
         return true
     }
 
-    return { jobs, applications, postJob, getPostedJobs, getAllCandidates, updateStatus, loading, error }
+    const changePassword = async (currentPass: string, newPass: string) => {
+        const res = await run(changeUserPassword(currentPass, newPass))
+
+        if (!res) return false
+
+        toast.success("Password changed successfully")
+
+        return true
+    }
+
+    return { jobs, applications, postJob, getPostedJobs, getAllCandidates, updateStatus, changePassword, loading, error }
 };
