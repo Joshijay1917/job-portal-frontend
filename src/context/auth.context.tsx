@@ -61,14 +61,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const restoreSession = async () => {
         setIsAuthenticated(false)
-        const res = await run(userDetails())
-        if (!res) {
+        try {
+            const res = await userDetails()
+            if (!res) {
+                setIsAuthenticated(false)
+                return
+            }
+            const user = res.data.data
+            setUser(user)
+            setIsAuthenticated(true)
+        } catch (error) {
             setIsAuthenticated(false)
-            return
         }
-        const user = res.data.data
-        setUser(user)
-        setIsAuthenticated(true)
     }
 
     useEffect(() => {

@@ -8,6 +8,7 @@ export type JobListCardType = {
     title: string;
     category: Category;
     type: JobType;
+    isSaved: boolean | null
     createdAt: string;
     updatedAt: string;
 }
