@@ -8,7 +8,7 @@ import { useAuth } from "../context/auth.context"
 
 export function JobCard({ job }: { job: JobListCardType }) {
     const { savePost, deletePost, loading } = useSavedPosts()
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated, user } = useAuth()
     const [saved, setSaved] = useState(job.isSaved ?? false)
 
     const handleToggleSave = async (e: React.MouseEvent) => {
@@ -39,7 +39,7 @@ export function JobCard({ job }: { job: JobListCardType }) {
             </div>
             <div className="flex flex-col items-end justify-between">
                 <p className="hidden md:inline md:text-lg text-gray-500">{formatDate(job.createdAt)}</p>
-                {isAuthenticated && (
+                {isAuthenticated && user?.role === 'candidate' && (
                     <button
                         onClick={handleToggleSave}
                         disabled={loading}
