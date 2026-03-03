@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { logger } from "../utils/logger";
 
 export const useAsync = () => {
   const [loading, setLoading] = useState(false);
@@ -21,15 +20,12 @@ export const useAsync = () => {
           err?.message || // axios message
           "Something went wrong";
 
-        logger.error("ERROR:", message);
         toast.error(message)
 
         setError(message);
       } else if (err instanceof Error) {
-        logger.error(err.message)
         toast.error(err.message)
       } else {
-        logger.error("Unexpected error:", err)
         toast.error("Something went wrong")
       }
       return null;
