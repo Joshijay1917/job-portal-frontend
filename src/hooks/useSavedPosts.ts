@@ -19,19 +19,21 @@ export const useSavedPosts = (): useSavedPostsType => {
     const savePost = async (jobPostId: string) => {
         const res = await run(saveJobPost(jobPostId))
 
-        if (!res) return
+        if (!res) return false
         toast.success('Job post saved successfully!')
 
         await getAllPosts()
+        return true
     }
 
     const deletePost = async (jobPostId: string) => {
         const res = await run(deleteSavedPost(jobPostId))
 
-        if (!res) return
+        if (!res) return false
         toast.success('Job post removed from saved posts!')
 
         setSavedJobs(prev => prev.filter(job => job.jobPostId._id !== jobPostId))
+        return true
     }
 
     return {

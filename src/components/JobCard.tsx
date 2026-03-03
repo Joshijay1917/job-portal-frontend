@@ -16,11 +16,11 @@ export function JobCard({ job }: { job: JobListCardType }) {
         if (loading) return
 
         if (saved) {
-            await deletePost(job._id)
-            setSaved(false)
+            const res = await deletePost(job._id)
+            if (res) setSaved(false)
         } else {
-            await savePost(job._id)
-            setSaved(true)
+            const res = await savePost(job._id)
+            if (res) setSaved(true)
         }
     }
 

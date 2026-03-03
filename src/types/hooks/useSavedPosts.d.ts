@@ -12,6 +12,6 @@ export type useSavedPostsType = {
     error: string | null
     savedJobs: SavedJobType[]
     getAllPosts: () => Promise<void>
-    savePost: (jobPostId: string) => Promise<void>
-    deletePost: (jobPostId: string) => Promise<void>
+    savePost: (jobPostId: string) => Promise<boolean>
+    deletePost: (jobPostId: string) => Promise<boolean>
 }
