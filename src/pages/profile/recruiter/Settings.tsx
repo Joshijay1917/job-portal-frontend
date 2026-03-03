@@ -1,23 +1,17 @@
 import { useState } from "react"
-import { Lock, Bell, Trash2, Eye, EyeOff } from "lucide-react"
+import { Lock, Trash2, Eye, EyeOff, User, Mail, Shield } from "lucide-react"
 import { useAuth } from "../../../context/auth.context"
 import { useRecruiter } from "../../../hooks/useRecruiter"
 
 export function Settings() {
-    const { logOutUser } = useAuth()
-    const { changePassword } = useRecruiter()
+    const { logOutUser, user } = useAuth()
+    const { changePassword, loading } = useRecruiter()
 
     // Change Password
     const [passwords, setPasswords] = useState({ current: "", newPass: "", confirm: "" })
     const [showPasswords, setShowPasswords] = useState({ current: false, newPass: false, confirm: false })
     const [passwordError, setPasswordError] = useState<string | null>(null)
 
-    // Notifications
-    const [notifications, setNotifications] = useState({
-        newApplications: true,
-        shortlisted: true,
-        jobExpiry: false,
-    })
 
     // Delete Account
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -44,9 +38,7 @@ export function Settings() {
         }
     }
 
-    const handleNotificationToggle = (key: keyof typeof notifications) => {
-        setNotifications(prev => ({ ...prev, [key]: !prev[key] }))
-    }
+
 
     const handleDeleteAccount = () => {
         if (deleteText !== "DELETE") return
@@ -96,43 +88,46 @@ export function Settings() {
                         type="submit"
                         className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer"
                     >
-                        Update Password
+                        {loading ? "Updating..." : "Update Password"}
                     </button>
                 </form>
             </div>
 
-            {/* Email Notifications */}
+            {/* Account Overview */}
             <div className="bg-white rounded-2xl p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="bg-blue-100 p-2 rounded-full">
-                        <Bell className="w-5 h-5 text-blue-600" />
+                        <User className="w-5 h-5 text-blue-600" />
                     </div>
-                    <h2 className="text-xl font-bold">Email Notifications</h2>
+                    <h2 className="text-xl font-bold">Account Overview</h2>
                 </div>
 
                 <div className="space-y-4 max-w-md">
-                    {([
-                        { key: "newApplications" as const, label: "New Applications", desc: "Get notified when a candidate applies to your job post" },
-                        { key: "shortlisted" as const, label: "Shortlist Updates", desc: "Get notified when shortlisted candidates respond" },
-                        { key: "jobExpiry" as const, label: "Job Post Expiry", desc: "Reminder when your job post is about to expire" },
-                    ]).map(({ key, label, desc }) => (
-                        <div key={key} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                            <div>
-                                <p className="font-medium text-sm">{label}</p>
-                                <p className="text-xs text-gray-500">{desc}</p>
-                            </div>
-                            <button
-                                onClick={() => handleNotificationToggle(key)}
-                                className={`w-12 h-7 rounded-full transition-colors cursor-pointer relative ${notifications[key] ? "bg-blue-600" : "bg-gray-300"
-                                    }`}
-                            >
-                                <div
-                                    className={`w-5 h-5 bg-white rounded-full absolute top-1 transition-transform ${notifications[key] ? "translate-x-6" : "translate-x-1"
-                                        }`}
-                                />
-                            </button>
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <div>
+                            <p className="text-xs text-gray-500">Email</p>
+                            <p className="font-medium text-sm">{user?.email}</p>
                         </div>
-                    ))}
+                        <Mail className="w-5 h-5 text-gray-400" />
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <div>
+                            <p className="text-xs text-gray-500">Role</p>
+                            <p className="font-medium text-sm capitalize">{user?.role}</p>
+                        </div>
+                        <Shield className="w-5 h-5 text-gray-400" />
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <div>
+                            <p className="text-xs text-gray-500">Email Verified</p>
+                            <p className="font-medium text-sm">{user?.email_verified ? "Verified" : "Not Verified"}</p>
+                        </div>
+                        <div className={`px-3 py-1 rounded-full text-xs font-medium ${user?.email_verified ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"}`}>
+                            {user?.email_verified ? "✓ Verified" : "Pending"}
+                        </div>
+                    </div>
                 </div>
             </div>
 
