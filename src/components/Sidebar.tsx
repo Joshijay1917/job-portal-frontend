@@ -12,8 +12,8 @@ interface SidebarProps {
 const navLinks = [
     { label: "Home", to: ROUTES.HOME, icon: Home },
     { label: "Browse Jobs", to: ROUTES.JOBS, icon: Briefcase },
-    { label: "About", to: "/about", icon: Info },
-    { label: "Contact", to: "/contact", icon: Phone },
+    { label: "About", to: ROUTES.ABOUT, icon: Info },
+    { label: "Contact", to: ROUTES.CONTACT, icon: Phone },
 ]
 
 function Sidebar({ isOpen, onClose }: SidebarProps) {

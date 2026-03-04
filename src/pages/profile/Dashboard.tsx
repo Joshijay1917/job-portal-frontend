@@ -1,4 +1,4 @@
-import { BadgeX, PencilLine } from 'lucide-react'
+import { PencilLine } from 'lucide-react'
 import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { CandidateProfile } from './candidate/CandidateProfile'
@@ -31,7 +31,7 @@ export function Dashboard() {
                     </div>
                 </div>
                 <div className='flex gap-2 h-fit md:h-1/2'>
-                    <span className='flex bg-red-400 text-white p-2 md:p-3 rounded-xl gap-2'><BadgeX /></span>
+                    {/* <span className='flex bg-red-400 text-white p-2 md:p-3 rounded-xl gap-2'><BadgeX /></span> */}
                     <button onClick={() => setEditMode(!editMode)} className='text-white bg-blue-600 hover:bg-gray-800 hover:cursor-pointer p-2 md:p-3 rounded-xl'><PencilLine /></button>
                 </div>
             </div>

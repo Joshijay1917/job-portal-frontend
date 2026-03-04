@@ -9,6 +9,7 @@ import { ROUTES } from "../../Routes"
 import { SidebarFilters } from "../../components/SidebarFilters"
 import { useJobs } from "../../context/jobs.context"
 import { Search } from "lucide-react"
+import { logger } from "../../utils/logger"
 
 export function Jobs() {
     const [search] = useSearchParams()
@@ -16,7 +17,11 @@ export function Jobs() {
     const { user } = useAuth()
     const { jobs, loading, getAllJobs, totalPages, page, goTo, filterJobPosts } = useJobs()
     const [filterOpen, setFilterOpen] = useState(false)
-    const [searchJob, setSearchJob] = useState<string | null>(search.get('search'))
+    const [searchJob, setSearchJob] = useState<string | null>(null)
+
+    useEffect(() => {
+        setSearchJob(search.get('search'))
+    }, [search])
 
     const pages = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -24,17 +29,18 @@ export function Jobs() {
     }
 
     useEffect(() => {
+        logger.log('Mountend!')
         if (searchJob) {
+            logger.log('SearchJob')
             filterJobPosts({ search: searchJob }, page)
+        } else {
+            logger.log('Get All')
+            getAllJobs(page)
         }
-    }, [searchJob])
-
-    useEffect(() => {
-        getAllJobs(page)
-    }, [page])
+    }, [searchJob, page])
 
     return (
-        <div className="p-10 md:p-20 md:px-50 bg-gray-100">
+        <div className="p-4 md:p-10 md:p-20 md:px-50 bg-gray-100">
             <div className="flex justify-between">
                 <div className="text-lg md:text-5xl flex gap-2 font-bold">
                     <h1>Latest</h1>

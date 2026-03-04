@@ -9,6 +9,7 @@ export type JobListCardType = {
     category: Category;
     type: JobType;
     isSaved: boolean | null
+    salary: { min: number, max: number }
     createdAt: string;
     updatedAt: string;
 }
