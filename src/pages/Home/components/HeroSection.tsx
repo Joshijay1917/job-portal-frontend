@@ -20,7 +20,7 @@ export function HeroSection() {
     const popularSearches = ["MERN Developer", "Java Developer", "Laravel Developer"]
 
     return (
-        <section className="relative bg-cover md:px-20 bg-[url('/hero-bg.png')] py-24 overflow-hidden">
+        <section className="relative bg-cover md:px-20 bg-[url('/hero-bg.jpg')] py-24 overflow-hidden">
             <div className="max-w-2xl text-center px-10 relative z-10">
                 {/* Heading */}
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
