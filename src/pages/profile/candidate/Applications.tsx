@@ -52,7 +52,7 @@ export function Applications() {
                     <div
                         key={app._id}
                         onClick={() => navigate(ROUTES.JOB_DETAIL(app.jobPostId))}
-                        className="bg-white flex justify-between items-center hover:shadow-2xl p-4 md:p-6 rounded-xl cursor-pointer shadow-md transition"
+                        className="bg-white flex justify-between items-center hover:shadow-md border border-gray-100 p-4 md:p-6 rounded-xl cursor-pointer shadow-sm transition-shadow duration-200"
                     >
                         <div className="flex gap-3 md:gap-5 items-center">
                             {app.logo_url

@@ -28,8 +28,8 @@ export function PostJob() {
     }
 
     return loading ? <Loader /> : error ? <span>{error}</span> : (
-        <div className="md:p-10 p-4 bg-white">
-            <h1 className="text-xl md:text-3xl font-bold mb-6">Post Job</h1>
+        <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-10">
+            <h2 className="text-xl md:text-2xl font-bold mb-6">Post a New Job</h2>
 
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -54,7 +54,7 @@ export function PostJob() {
                         {...register("description", {
                             required: "Description is required"
                         })}
-                        className="w-full bg-white border border-gray-300 px-4 py-2"
+                        className="w-full bg-white shadow-sm border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"
                         rows={4}
                     />
                     <p className="text-red-500 text-sm">
@@ -64,26 +64,26 @@ export function PostJob() {
 
                 {/* Responsibilities */}
                 <div>
-                    <label htmlFor="responsibilities" className="block mb-1 font-medium">
+                    <label htmlFor="responsibilities" className="block mb-1 text-sm font-medium text-gray-700">
                         Responsibilities (one per line)
                     </label>
                     <textarea
                         id="responsibilities"
                         {...register("responsibilities")}
-                        className="w-full bg-white border border-gray-300 px-4 py-2"
+                        className="w-full bg-white shadow-sm border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"
                         rows={4}
                     />
                 </div>
 
                 {/* Skills */}
                 <div>
-                    <label htmlFor="skills" className="block mb-1 font-medium">
+                    <label htmlFor="skills" className="block mb-1 text-sm font-medium text-gray-700">
                         Skills (one per line)
                     </label>
                     <textarea
                         id="skills"
                         {...register("skills")}
-                        className="w-full bg-white border border-gray-300 px-4 py-2"
+                        className="w-full bg-white shadow-sm border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"
                         rows={4}
                     />
                 </div>
@@ -132,7 +132,7 @@ export function PostJob() {
 
                 {/* Category */}
                 <div>
-                    <label htmlFor="category" className="block mb-1 font-medium">
+                    <label htmlFor="category" className="block mb-1 text-sm font-medium text-gray-700">
                         Category
                     </label>
                     <select
@@ -140,7 +140,7 @@ export function PostJob() {
                         {...register("category", {
                             required: "Category is required"
                         })}
-                        className="w-full bg-white border border-gray-300 px-4 py-2"
+                        className="w-full bg-white shadow-sm border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"
                     >
                         <option value="">Select category</option>
                         {categories.map(cat => (
@@ -152,7 +152,7 @@ export function PostJob() {
 
                 {/* Job Type */}
                 <div>
-                    <label htmlFor="type" className="block mb-1 font-medium">
+                    <label htmlFor="type" className="block mb-1 text-sm font-medium text-gray-700">
                         Job Type
                     </label>
                     <select
@@ -160,7 +160,7 @@ export function PostJob() {
                         {...register("type", {
                             required: "Job type required"
                         })}
-                        className="w-full bg-white border border-gray-300 px-4 py-2"
+                        className="w-full bg-white shadow-sm border border-gray-200 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"
                     >
                         <option value="">Select type</option>
                         {Array.from([JobType.fulltime, JobType.parttime]).map(type => (
@@ -179,7 +179,7 @@ export function PostJob() {
                 {/* Submit */}
                 <button
                     type="submit"
-                    className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700"
+                    className="bg-blue-600 text-white px-8 py-2.5 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm cursor-pointer"
                 >
                     Post Job
                 </button>

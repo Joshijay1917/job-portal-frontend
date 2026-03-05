@@ -35,12 +35,12 @@ export function RecruiterProfile({ editMode, setEditMode }: { editMode: boolean,
     }, [user, reset])
 
     return loading ? <Loader /> : (
-        <div className="grid gap-10 md:px-10 px-4 bg-white py-10">
-            <h1 className="text-xl md:text-3xl font-bold">Profile</h1>
+        <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-10">
+            <h2 className="text-xl md:text-2xl font-bold mb-6">Company Profile</h2>
 
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="space-y-5"
+                className="max-w-2xl space-y-5"
             >
 
                 {/* Company Name */}
@@ -110,14 +110,14 @@ export function RecruiterProfile({ editMode, setEditMode }: { editMode: boolean,
 
                 {/* Category */}
                 <div>
-                    <label htmlFor="category" className="block mb-1 font-medium">Category</label>
+                    <label htmlFor="category" className="block mb-1 text-sm font-medium text-gray-700">Category</label>
                     <select
                         id="category"
                         disabled={!editMode}
                         {...register("category", {
                             required: "Category is required"
                         })}
-                        className={`w-full px-4 py-2 ${!editMode ? 'bg-gray-100' : 'bg-white'} border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none`}
+                        className={`w-full px-4 py-2.5 ${!editMode ? 'bg-gray-50' : 'bg-white'} border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow disabled:opacity-60`}
                     >
                         <option value="">Select category</option>
                         {categories.map(cat => (
@@ -131,7 +131,7 @@ export function RecruiterProfile({ editMode, setEditMode }: { editMode: boolean,
                 {editMode && (
                     <button
                         type="submit"
-                        className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition"
+                        className="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm cursor-pointer"
                     >
                         Save Changes
                     </button>

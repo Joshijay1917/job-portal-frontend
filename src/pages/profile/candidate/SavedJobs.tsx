@@ -43,7 +43,7 @@ export function SavedJobs() {
                     <div
                         key={saved._id}
                         onClick={() => navigate(ROUTES.JOB_DETAIL(saved.jobPostId._id))}
-                        className="bg-white flex justify-between items-center hover:shadow-2xl p-4 md:p-6 rounded-xl cursor-pointer shadow-md transition"
+                        className="bg-white flex justify-between items-center hover:shadow-md border border-gray-100 p-4 md:p-6 rounded-xl cursor-pointer shadow-sm transition-shadow duration-200"
                     >
                         <div className="flex gap-3 md:gap-5 items-center">
                             {saved.jobPostId.logo_url
@@ -62,7 +62,7 @@ export function SavedJobs() {
                         <div className="flex flex-col items-end gap-2">
                             <button
                                 onClick={(e) => handleRemove(e, saved.jobPostId._id)}
-                                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition cursor-pointer"
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-colors cursor-pointer"
                                 title="Remove from saved"
                             >
                                 <Trash2 size={18} />

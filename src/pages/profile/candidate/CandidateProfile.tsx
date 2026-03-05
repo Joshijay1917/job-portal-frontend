@@ -10,6 +10,7 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<CandidateForm>({
     defaultValues: user
@@ -26,11 +27,17 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
     getUser()
   }, [])
 
+  useEffect(() => {
+    if (user) {
+      reset(user)
+    }
+  }, [user, reset])
+
   return loading ? <Loader /> : (
-    <div className="grid md:grid-cols-3 gap-10 px-4 md:px-10 bg-white py-10">
+    <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-10">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="col-span-2 space-y-5"
+        className="max-w-2xl space-y-5"
       >
 
         {/* Full Name */}
@@ -59,11 +66,11 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block mb-1 font-medium">Description</label>
+          <label htmlFor="description" className="block mb-1 text-sm font-medium text-gray-700">Description</label>
           <textarea
             disabled={!editMode}
             {...register("description")}
-            className="w-full px-4 py-2 bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow disabled:opacity-60"
             rows={4}
           />
         </div>
@@ -106,10 +113,10 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
         {/* Resume Upload */}
         {editMode && (
           <div>
-            <label htmlFor="resume" className="block mb-1 font-medium">Resume</label>
+            <label htmlFor="resume" className="block mb-1 text-sm font-medium text-gray-700">Resume</label>
             <input
               type="file"
-              className={`w-full px-4 py-2 ${!editMode ? 'bg-gray-100' : 'bg-white'} border border-gray-300`}
+              className="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100"
             />
           </div>
         )}
@@ -118,7 +125,7 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
         {editMode && (
           <button
             type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm cursor-pointer"
           >
             Save Changes
           </button>

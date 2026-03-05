@@ -3,12 +3,12 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import type { JobDetails } from "../../types/hooks/useJobs"
 import { useJobs } from "../../context/jobs.context"
-import { Loader } from "../../components/Loader"
 import { useCandidate } from "../../hooks/useCandidate"
 import { useAuth } from "../../context/auth.context"
 import { formatSalary } from "../../utils/formatSalary"
 import { formatDate } from "../../utils/formatDate"
 import { generateCmpLogoUrl } from "../../utils/generateCmpLogoUrl"
+import JobDetailSkeletonLoading from "./JobDetailSkeletonLoading"
 
 export function JobDetail() {
     const { id } = useParams()
@@ -60,6 +60,8 @@ export function JobDetail() {
         handleJobDetailsFetch()
     }, [])
 
+    if (loading) return <JobDetailSkeletonLoading />
+
     const job = jobDetails?.jobPost
 
     const metaItems = [
@@ -102,8 +104,6 @@ export function JobDetail() {
                     </div>
                 </div>
             </div>
-
-            {loading && <div className="m-10"><Loader /></div>}
 
             {/* Description */}
             <div className="max-w-4xl mx-auto px-5 mt-6">
