@@ -24,13 +24,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
 
     const loginUser = async (data: LoginFormValues) => {
         setLoading(true)
         const result = await asyncRunner(logIn(data))
 
         if (!result || !result.data) {
-            toast.error(result.error)
+            setError(result.error)
             setLoading(false)
             return;
         }
@@ -49,7 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const result = await asyncRunner(register(data))
 
         if (!result || !result.data) {
-            toast.error(result.error)
+            setError(result.error)
             setLoading(false)
             return;
         }
@@ -101,7 +102,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         loginUser,
         registerUser,
         logOutUser,
-        loading
+        loading,
+        error
     }
 
     return (
