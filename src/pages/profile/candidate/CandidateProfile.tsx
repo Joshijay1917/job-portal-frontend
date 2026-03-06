@@ -1,15 +1,17 @@
 import { useForm } from "react-hook-form"
 import { InputField } from "../../../components/InputField"
-import { useUser } from "../../../context/user.context"
 import { useEffect, type Dispatch, type SetStateAction } from "react"
 import { Loader } from "../../../components/Loader"
 import type { CandidateForm } from "../../../types/context/user.context"
+import { File, FolderOpen, X } from "lucide-react"
+import { useUser } from "../../../hooks/useUser"
 
 export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean, setEditMode: Dispatch<SetStateAction<boolean>> }) {
   const { user, loading, getUser, updateUser } = useUser()
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<CandidateForm>({
     defaultValues: user
@@ -23,14 +25,24 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
   }
 
   useEffect(() => {
-    getUser()
+    const fetchData = async () => {
+      await getUser()
+    }
+
+    fetchData()
   }, [])
 
+  useEffect(() => {
+    if (user) {
+      reset(user)
+    }
+  }, [user, reset])
+
   return loading ? <Loader /> : (
-    <div className="grid md:grid-cols-3 gap-10 px-4 md:px-10 bg-white py-10">
+    <div className="bg-white flex flex-col gap-5 lg:flex-row justify-between rounded-xl border border-gray-200 p-6 md:p-10">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="col-span-2 space-y-5"
+        className="max-w-2xl space-y-5"
       >
 
         {/* Full Name */}
@@ -46,7 +58,7 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
         {/* Email */}
         <InputField
           label="Email"
-          disabled
+          disabled={!editMode}
           register={register("email", {
             required: "Email required",
             pattern: {
@@ -59,11 +71,11 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block mb-1 font-medium">Description</label>
+          <label htmlFor="description" className="block mb-1 text-sm font-medium text-gray-700">Description</label>
           <textarea
             disabled={!editMode}
             {...register("description")}
-            className="w-full px-4 py-2 bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow disabled:opacity-60"
             rows={4}
           />
         </div>
@@ -103,27 +115,44 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
           />
         </div>
 
-        {/* Resume Upload */}
-        {editMode && (
-          <div>
-            <label htmlFor="resume" className="block mb-1 font-medium">Resume</label>
-            <input
-              type="file"
-              className={`w-full px-4 py-2 ${!editMode ? 'bg-gray-100' : 'bg-white'} border border-gray-300`}
-            />
-          </div>
-        )}
-
         {/* Submit */}
         {editMode && (
           <button
             type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded-xl hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm cursor-pointer"
           >
             Save Changes
           </button>
         )}
       </form>
+
+      <div className="py-10 flex flex-col lg:flex-row gap-5 justify-between lg:w-1/2 lg:mx-10">
+        <div className="w-full">
+          <h2 className="text-lg font-medium text-gray-700 mb-3">Upload Resume</h2>
+          <label className="bg-blue-50 border-2 flex flex-col items-center justify-center py-10 px-4 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-400 hover:bg-blue-50/80 transition-colors">
+            <FolderOpen className="w-10 h-10 text-blue-500 mb-2" />
+            <p className="text-sm text-gray-600">Drop files here or</p>
+            <span className="text-blue-600 font-medium text-sm mt-1">Browse</span>
+            <p className="text-xs text-gray-400 mt-2">PDF, DOC, DOCX</p>
+            <input type="file" accept=".pdf,.doc,.docx" className="hidden" />
+          </label>
+        </div>
+        <div className="w-full">
+          <h3 className="text-lg font-medium text-gray-400 mb-3">Recently uploaded</h3>
+          <div className="flex items-center gap-2">
+            <div className="flex justify-between w-full">
+              <div className="flex gap-2">
+                <File className="w-9 h-9 rounded-full bg-blue-50 p-2 text-blue-600" />
+                <div>
+                  <p className="text-sm font-medium text-gray-700">MyFile.pdf</p>
+                  <p className="text-xs text-gray-400">2 mb</p>
+                </div>
+              </div>
+              <X className="w-4 h-4 text-gray-400" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

@@ -5,8 +5,8 @@ export type userContextType = {
     user?: Recruiter | Candidate
     getUser: () => Promise<void>
     updateUser: (user: RecruiterForm | CandidateForm) => Promise<boolean>
+    changePassword: (currentPass: string, newPass: string) => Promise<boolean>
     loading: boolean
-    error: string | null
 }
 
 export type RecruiterForm = {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { X, Brain, ChevronsLeftRightEllipsis, Clock, Database, Laptop, LayoutPanelLeft, MoveRight, TabletSmartphone, Timer, UsersRound } from "lucide-react"
 import { Categories, JobType } from "../utils/constants"
 import { scrollToTop } from "../utils/scrollToTop"
-import { useJobs } from "../context/jobs.context"
+import { useJobs } from "../hooks/useJobs"
 
 type catType = {
     id: number,
@@ -50,7 +50,7 @@ export function SidebarFilters({ isOpen, onClose }: SidebarFiltersProps) {
         } else {
             getAllJobs(page)
         }
-    }, [page, categorie, jobType])
+    }, [page, categorie, jobType, filterJobPosts, getAllJobs])
 
     return (
         <>

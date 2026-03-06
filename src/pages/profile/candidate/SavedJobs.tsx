@@ -1,30 +1,67 @@
-import { useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Building2, Clock, Trash2 } from "lucide-react"
-import { useSavedPosts } from "../../../hooks/useSavedPosts"
 import { Loader } from "../../../components/Loader"
 import { ROUTES } from "../../../Routes"
 import { generateCmpLogoUrl } from "../../../utils/generateCmpLogoUrl"
 import { formatDate } from "../../../utils/formatDate"
+import { asyncRunner } from "../../../utils/asyncRunner"
+import { deleteSavedPost, getAllSavedPosts } from "../../../lib/apis"
+import toast from "react-hot-toast"
+import type { SavedJobType } from "../../../types/hooks/useSavedPosts"
+import { Retry } from "../../../components/Retry"
 
 export function SavedJobs() {
-    const { savedJobs, loading, getAllPosts, deletePost } = useSavedPosts()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [savedJobs, setSavedJobs] = useState<SavedJobType[]>([])
     const navigate = useNavigate()
-
-    useEffect(() => {
-        getAllPosts()
-    }, [])
 
     const handleRemove = async (e: React.MouseEvent, jobPostId: string) => {
         e.stopPropagation()
-        await deletePost(jobPostId)
+        setLoading(true)
+        const res = await asyncRunner(deleteSavedPost(jobPostId))
+
+        if (!res || !res.data) {
+            setError(res.error)
+            setLoading(false)
+            return;
+        }
+
+        setSavedJobs(prev => prev.filter(job => job.jobPostId._id !== jobPostId))
+        toast.success('Post removed from saved posts!')
+        setLoading(false)
     }
+
+    const getSavedPosts = useCallback(async () => {
+        setLoading(true)
+        const res = await asyncRunner(getAllSavedPosts())
+
+        if (!res || !res.data) {
+            setError(res.error)
+            setLoading(false)
+            return;
+        }
+
+        setSavedJobs(res.data.data)
+        setLoading(false)
+    }, [])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getSavedPosts()
+        }
+
+        fetchData()
+    }, [getSavedPosts])
 
     return (
         <div className="md:p-10 bg-gray-100">
             <h1 className="text-xl md:text-3xl font-bold mb-6">Saved Jobs</h1>
 
             {loading && <Loader />}
+
+            {!loading && error && <Retry onRetry={() => getSavedPosts()} />}
 
             {!loading && savedJobs.length === 0 && (
                 <div className="bg-white rounded-2xl p-10 text-center">
@@ -43,7 +80,7 @@ export function SavedJobs() {
                     <div
                         key={saved._id}
                         onClick={() => navigate(ROUTES.JOB_DETAIL(saved.jobPostId._id))}
-                        className="bg-white flex justify-between items-center hover:shadow-2xl p-4 md:p-6 rounded-xl cursor-pointer shadow-md transition"
+                        className="bg-white flex justify-between items-center hover:shadow-md border border-gray-100 p-4 md:p-6 rounded-xl cursor-pointer shadow-sm transition-shadow duration-200"
                     >
                         <div className="flex gap-3 md:gap-5 items-center">
                             {saved.jobPostId.logo_url
@@ -62,7 +99,7 @@ export function SavedJobs() {
                         <div className="flex flex-col items-end gap-2">
                             <button
                                 onClick={(e) => handleRemove(e, saved.jobPostId._id)}
-                                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition cursor-pointer"
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-colors cursor-pointer"
                                 title="Remove from saved"
                             >
                                 <Trash2 size={18} />

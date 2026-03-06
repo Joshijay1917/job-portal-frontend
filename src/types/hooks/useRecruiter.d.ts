@@ -1,16 +1,8 @@
-import type { JobListCardType } from "../context/Job.context"
-import type { PostJobType } from "../dashboard/recruiter"
-
 export type useRecruiterType = {
     loading: boolean
-    error: string | null
-    jobs: JobListCardType[]
     applications: ApplicationType[]
-    postJob: (data: PostJobType) => Promise<void>
-    getPostedJobs: () => Promise<void>
     getAllCandidates: () => Promise<void>
     updateStatus: (appId: string, status: Status) => Promise<boolean>
-    changePassword: (currentPass: string, newPass: string) => Promise<boolean>
 }
 
 export type ApplicationType = {

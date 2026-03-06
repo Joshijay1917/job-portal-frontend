@@ -1,8 +1,8 @@
 import { X, Home, Briefcase, Info, Phone, LogOut, User } from "lucide-react"
 import { Link } from "react-router-dom"
 import { Logo } from "./Logo"
-import { useAuth } from "../context/auth.context"
 import { ROUTES } from "../Routes"
+import { useAuth } from "../hooks/useAuth"
 
 interface SidebarProps {
     isOpen: boolean
@@ -12,8 +12,8 @@ interface SidebarProps {
 const navLinks = [
     { label: "Home", to: ROUTES.HOME, icon: Home },
     { label: "Browse Jobs", to: ROUTES.JOBS, icon: Briefcase },
-    { label: "About", to: "/about", icon: Info },
-    { label: "Contact", to: "/contact", icon: Phone },
+    { label: "About", to: ROUTES.ABOUT, icon: Info },
+    { label: "Contact", to: ROUTES.CONTACT, icon: Phone },
 ]
 
 function Sidebar({ isOpen, onClose }: SidebarProps) {

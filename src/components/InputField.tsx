@@ -21,7 +21,7 @@ export function InputField({ label, disabled = false, value, register, type = "t
           disabled={disabled}
           value={value}
           {...register}
-          className={`w-1/2 px-4 py-2 ${disabled ? 'bg-gray-100' : 'bg-white'} border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none`}
+          className={`w-1/2 px-4 py-2 ${disabled ? 'bg-gray-100' : 'bg-white'} border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none`}
         />
       </div>
       {error && <p className="text-sm text-red-500 mt-1">{error}</p>}

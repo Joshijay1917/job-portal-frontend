@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { useMemo } from "react"
-import { useAuth } from "../../context/auth.context"
 import { candidateMenu, recruiterMenu } from "./menu"
+import { useAuth } from "../../hooks/useAuth"
 
 
 export function DashboardTabs() {
@@ -30,8 +30,8 @@ export function DashboardTabs() {
     const widthPercentage = 100 / menu.length
 
     return (
-        <div className="w-full bg-white">
-            <div className="relative md:w-1/2 my-10 bg-white pt-3">
+        <div className="my-6 bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="relative">
                 <div
                     className="grid"
                     style={{ gridTemplateColumns: `repeat(${menu.length}, 1fr)` }}
@@ -40,10 +40,10 @@ export function DashboardTabs() {
                         <span
                             key={item.path}
                             onClick={() => navigate(item.path)}
-                            className={`text-center text-xs md:text-base cursor-pointer pb-3 transition-colors duration-200
+                            className={`text-center text-xs md:text-sm cursor-pointer py-3.5 transition-colors duration-200 font-medium
                             ${index === activeIndex
-                                    ? "text-black font-semibold"
-                                    : "text-gray-400"
+                                    ? "text-blue-600"
+                                    : "text-gray-400 hover:text-gray-700"
                                 }
             `}
                         >
@@ -54,7 +54,7 @@ export function DashboardTabs() {
 
                 {/* Sliding Indicator */}
                 <div
-                    className="absolute bottom-0 h-1 bg-gray-700 transition-all duration-300"
+                    className="absolute bottom-0 h-0.5 bg-blue-600 transition-all duration-300 rounded-full"
                     style={{
                         width: `${widthPercentage}%`,
                         transform: `translateX(${activeIndex * 100}%)`

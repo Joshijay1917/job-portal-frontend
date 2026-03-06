@@ -1,20 +1,21 @@
-import { useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Building2, Clock, MapPin } from "lucide-react"
-import { useCandidate } from "../../../hooks/useCandidate"
 import { Loader } from "../../../components/Loader"
 import { Status } from "../../../types/hooks/useRecruiter.d"
 import { ROUTES } from "../../../Routes"
 import { generateCmpLogoUrl } from "../../../utils/generateCmpLogoUrl"
 import { formatDate } from "../../../utils/formatDate"
+import type { CandidateApplicationType } from "../../../types/hooks/useCandidate"
+import { asyncRunner } from "../../../utils/asyncRunner"
+import { getAppliedJobs } from "../../../lib/apis"
+import { Retry } from "../../../components/Retry"
 
 export function Applications() {
-    const { applications, loading, getAppliedJobs } = useCandidate()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [applications, setApplications] = useState<CandidateApplicationType[]>([])
     const navigate = useNavigate()
-
-    useEffect(() => {
-        getAppliedJobs()
-    }, [])
 
     const getStatusStyle = (status: Status) => {
         switch (status) {
@@ -29,11 +30,35 @@ export function Applications() {
         }
     }
 
+    const getAppliedJob = useCallback(async () => {
+        setLoading(true)
+        const res = await asyncRunner(getAppliedJobs())
+
+        if (!res || !res.data) {
+            setError(res.error)
+            setLoading(false)
+            return;
+        }
+
+        setApplications(res.data.data)
+        setLoading(false)
+    }, [])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getAppliedJob()
+        }
+
+        fetchData()
+    }, [getAppliedJob])
+
     return (
         <div className="md:p-10 bg-gray-100">
             <h1 className="text-xl md:text-3xl font-bold mb-6">My Applications</h1>
 
             {loading && <Loader />}
+
+            {!loading && error && <Retry onRetry={() => getAppliedJob()} />}
 
             {!loading && applications.length === 0 && (
                 <div className="bg-white rounded-2xl p-10 text-center">
@@ -52,7 +77,7 @@ export function Applications() {
                     <div
                         key={app._id}
                         onClick={() => navigate(ROUTES.JOB_DETAIL(app.jobPostId))}
-                        className="bg-white flex justify-between items-center hover:shadow-2xl p-4 md:p-6 rounded-xl cursor-pointer shadow-md transition"
+                        className="bg-white flex justify-between items-center hover:shadow-md border border-gray-100 p-4 md:p-6 rounded-xl cursor-pointer shadow-sm transition-shadow duration-200"
                     >
                         <div className="flex gap-3 md:gap-5 items-center">
                             {app.logo_url

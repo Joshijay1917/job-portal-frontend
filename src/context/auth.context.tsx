@@ -1,62 +1,73 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import type { LoginFormValues, RegisterFormValues, User } from "../types/auth";
 import type { AuthContextType } from "../types/context/auth.context";
-import { useAsync } from "../hooks/useAsync";
-import { logIn, logoutUser, register, userDetails } from "../services/authService";
+import { logIn, logoutUser, register, userDetails } from "../lib/Apis/authApis";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../Routes";
+import { asyncRunner } from "../utils/asyncRunner";
+import toast from "react-hot-toast";
 import { logger } from "../utils/logger";
 
-const AuthContext = createContext<AuthContextType | null>(null)
-
-export const useAuth = () => {
-    const context = useContext(AuthContext)
-
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-
-    return context;
-}
+export const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const { run, loading, error } = useAsync()
     const navigate = useNavigate()
     const [user, setUser] = useState<User | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
 
     const loginUser = async (data: LoginFormValues) => {
-        const result = await run(logIn(data))
+        setError(null)
+        setLoading(true)
+        const result = await asyncRunner(logIn(data))
 
-        if (!result) return;
+        if (!result || !result.data) {
+            setError(result.error)
+            setLoading(false)
+            return;
+        }
 
         const payload = result.data.data
-        logger.log(payload)
 
         localStorage.setItem("accessToken", payload.accessToken)
         setUser(payload.user)
         setIsAuthenticated(true)
         navigate(ROUTES.HOME)
+        setLoading(false)
     }
 
     const registerUser = async (data: RegisterFormValues) => {
-        const result = await run(register(data))
+        setError(null)
+        setLoading(true)
+        const result = await asyncRunner(register(data))
 
-        if (!result) {
+        if (!result || !result.data) {
+            setError(result.error)
+            setLoading(false)
             return;
         }
 
+        toast.success("User registered successfully")
         navigate(ROUTES.LOGIN)
+        setLoading(false)
     }
 
     const logOutUser = async () => {
-        const res = await run(logoutUser())
+        setError(null)
+        setLoading(true)
+        const res = await asyncRunner(logoutUser())
 
-        if (!res) return;
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return;
+        }
 
         setUser(null)
         setIsAuthenticated(false)
         localStorage.removeItem('accessToken')
+        setLoading(false)
     }
 
     const restoreSession = async () => {
@@ -67,16 +78,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 setIsAuthenticated(false)
                 return
             }
-            const user = res.data.data
+            const user = res.data
             setUser(user)
             setIsAuthenticated(true)
-        } catch (error) {
+        } catch (error: unknown) {
+            logger.error(error)
             setIsAuthenticated(false)
         }
     }
 
     useEffect(() => {
-        restoreSession()
+        const initSession = async () => {
+            await restoreSession()
+        }
+
+        initSession()
     }, [])
 
     const values = {

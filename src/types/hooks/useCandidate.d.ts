@@ -30,9 +30,7 @@ export type CandidateApplicationType = {
 
 export type useCandidateType = {
     loading: boolean
-    error: string | null
     applications: CandidateApplicationType[]
     applyJobPost: (jobPostId: string) => Promise<boolean>
     getAppliedJobs: () => Promise<void>
-    changePassword: (currentPass: string, newPass: string) => Promise<boolean>
 }

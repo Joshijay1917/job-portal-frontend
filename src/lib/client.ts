@@ -1,15 +1,16 @@
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
 
-const api = axios.create({
+const client = axios.create({
     baseURL: API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
-    withCredentials: true
+    withCredentials: true,
+    timeout: 10000
 });
 
-api.interceptors.request.use(
+client.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('accessToken');
         if (token) {
@@ -20,7 +21,7 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-api.interceptors.response.use(
+client.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
@@ -36,7 +37,7 @@ api.interceptors.response.use(
 
                 originalRequest.headers.Authorization = `Bearer ${accessToken}`;
 
-                return api(originalRequest)
+                return client(originalRequest)
             } catch (error) {
                 localStorage.removeItem('accessToken')
                 return Promise.reject(error)
@@ -46,4 +47,4 @@ api.interceptors.response.use(
     }
 );
 
-export default api;
+export default client;

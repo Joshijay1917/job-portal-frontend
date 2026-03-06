@@ -2,21 +2,26 @@ import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import type { JobListCardType } from "../../types/context/Job.context"
 import { Loader } from "../../components/Loader"
-import { useAuth } from "../../context/auth.context"
 import { JobFilter } from "./JobFilter"
 import { JobCard } from "../../components/JobCard"
 import { ROUTES } from "../../Routes"
 import { SidebarFilters } from "../../components/SidebarFilters"
-import { useJobs } from "../../context/jobs.context"
+import { useAuth } from "../../hooks/useAuth"
+import { useJobs } from "../../hooks/useJobs"
 import { Search } from "lucide-react"
+import { Retry } from "../../components/Retry"
 
 export function Jobs() {
     const [search] = useSearchParams()
     const navigate = useNavigate()
     const { user } = useAuth()
-    const { jobs, loading, getAllJobs, totalPages, page, goTo, filterJobPosts } = useJobs()
+    const { jobs, loading, error, getAllJobs, totalPages, page, goTo, filterJobPosts } = useJobs()
     const [filterOpen, setFilterOpen] = useState(false)
-    const [searchJob, setSearchJob] = useState<string | null>(search.get('search'))
+    const [searchJob, setSearchJob] = useState<string | null>(null)
+
+    useEffect(() => {
+        setSearchJob(search.get('search'))
+    }, [search])
 
     const pages = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -26,15 +31,13 @@ export function Jobs() {
     useEffect(() => {
         if (searchJob) {
             filterJobPosts({ search: searchJob }, page)
+        } else {
+            getAllJobs(page)
         }
-    }, [searchJob])
-
-    useEffect(() => {
-        getAllJobs(page)
-    }, [page])
+    }, [searchJob, page, getAllJobs, filterJobPosts])
 
     return (
-        <div className="p-10 md:p-20 md:px-50 bg-gray-100">
+        <div className="p-4 md:p-10 md:p-20 md:px-50 bg-gray-100">
             <div className="flex justify-between">
                 <div className="text-lg md:text-5xl flex gap-2 font-bold">
                     <h1>Latest</h1>
@@ -68,7 +71,8 @@ export function Jobs() {
                     <div className="flex flex-col gap-5">
                         {loading && <div className="mt-50"><Loader /></div>}
                         {!loading && jobs.length === 0 && <span className="text-center">No jobs found!</span>}
-                        {jobs.map((job: JobListCardType) => (
+                        {!loading && error && <Retry onRetry={() => getAllJobs(page)} />}
+                        {jobs && jobs.map((job: JobListCardType) => (
                             <div key={job._id} onClick={() => navigate(ROUTES.JOB_DETAIL(job._id))}>
                                 <JobCard job={job} />
                             </div>
