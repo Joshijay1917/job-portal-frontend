@@ -19,6 +19,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
 
     const getAllJobs = useCallback(async (p: number) => {
         setJobs([])
+        setError(null)
         setLoading(true)
         scrollToTop()
         const res = await asyncRunner(getAllJobPosts(p));
@@ -50,6 +51,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
 
     const filterJobPosts = useCallback(async (filters: FilterJobType, pageNo: number) => {
         setJobs([])
+        setError(null)
         setLoading(true)
         scrollToTop()
         const res = await asyncRunner(FilterJobs(filters, pageNo));

@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [error, setError] = useState<string | null>(null)
 
     const loginUser = async (data: LoginFormValues) => {
+        setError(null)
         setLoading(true)
         const result = await asyncRunner(logIn(data))
 
@@ -37,6 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const registerUser = async (data: RegisterFormValues) => {
+        setError(null)
         setLoading(true)
         const result = await asyncRunner(register(data))
 
@@ -52,6 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const logOutUser = async () => {
+        setError(null)
         setLoading(true)
         const res = await asyncRunner(logoutUser())
 
