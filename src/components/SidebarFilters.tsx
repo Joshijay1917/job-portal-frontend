@@ -3,7 +3,7 @@ import { X, Brain, ChevronsLeftRightEllipsis, Clock, Database, Laptop, LayoutPan
 import { Categories, JobType } from "../utils/constants"
 import { scrollToTop } from "../utils/scrollToTop"
 import { useJobs } from "../hooks/useJobs"
-
+import { useDebounce } from "../hooks/useDebounce"
 type catType = {
     id: number,
     name: string,
@@ -43,14 +43,17 @@ export function SidebarFilters({ isOpen, onClose }: SidebarFiltersProps) {
         setJobType(null)
     }
 
+    const debouncedCategory = useDebounce(categorie, 300)
+    const debouncedJobType = useDebounce(jobType, 300)
+
     useEffect(() => {
         scrollToTop()
-        if (categorie || jobType) {
-            filterJobPosts({ category: categorie?.name, jobtype: jobType }, page)
+        if (debouncedCategory || debouncedJobType) {
+            filterJobPosts({ category: debouncedCategory?.name, jobtype: debouncedJobType }, page)
         } else {
             getAllJobs(page)
         }
-    }, [page, categorie, jobType, filterJobPosts, getAllJobs])
+    }, [page, debouncedCategory, debouncedJobType, filterJobPosts, getAllJobs])
 
     return (
         <>

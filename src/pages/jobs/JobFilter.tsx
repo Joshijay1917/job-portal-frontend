@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { Categories, JobType } from "../../utils/constants"
 import { scrollToTop } from "../../utils/scrollToTop"
 import { useJobs } from "../../hooks/useJobs"
-
+import { useDebounce } from "../../hooks/useDebounce"
 type catType = {
     id: number,
     name: string,
@@ -39,14 +39,18 @@ export function JobFilter({ search }: { search: URLSearchParams }) {
         setJobType(null)
     }
 
+    const debouncedCategory = useDebounce(categorie, 300)
+    const debouncedJobType = useDebounce(jobType, 300)
+    const debouncedSearchJob = useDebounce(searchJob, 300)
+
     useEffect(() => {
         scrollToTop()
-        if (categorie || jobType || searchJob) {
-            filterJobPosts({ category: categorie?.name, jobtype: jobType, search: searchJob }, page)
+        if (debouncedCategory || debouncedJobType || debouncedSearchJob) {
+            filterJobPosts({ category: debouncedCategory?.name, jobtype: debouncedJobType, search: debouncedSearchJob }, page)
         } else {
             getAllJobs(page)
         }
-    }, [page, categorie, jobType, searchJob])
+    }, [page, debouncedCategory, debouncedJobType, debouncedSearchJob])
 
     return (
         <div className="flex flex-col gap-10">

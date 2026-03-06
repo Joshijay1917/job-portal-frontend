@@ -10,7 +10,7 @@ import { useAuth } from "../../hooks/useAuth"
 import { useJobs } from "../../hooks/useJobs"
 import { Search } from "lucide-react"
 import { Retry } from "../../components/Retry"
-
+import { useDebounce } from "../../hooks/useDebounce"
 export function Jobs() {
     const [search] = useSearchParams()
     const navigate = useNavigate()
@@ -28,13 +28,20 @@ export function Jobs() {
         pages.push(i);
     }
 
+    const debouncedSearchJob = useDebounce(searchJob, 300)
+
     useEffect(() => {
-        if (searchJob) {
-            filterJobPosts({ search: searchJob }, page)
-        } else {
+        if (debouncedSearchJob) {
+            filterJobPosts({ search: debouncedSearchJob }, page)
+        } else if (debouncedSearchJob === '') {
+            // handle the case when search is cleared manually but filterJobPosts has already been mounted.
+            // If another filter isn't active, load all jobs again
             getAllJobs(page)
         }
-    }, [searchJob, page, getAllJobs, filterJobPosts])
+        else if (debouncedSearchJob === null) {
+            getAllJobs(page)
+        }
+    }, [debouncedSearchJob, page, getAllJobs, filterJobPosts])
 
     return (
         <div className="p-4 md:p-10 md:p-20 md:px-50 bg-gray-100">
