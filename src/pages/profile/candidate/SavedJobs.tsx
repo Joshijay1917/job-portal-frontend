@@ -1,24 +1,54 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Building2, Clock, Trash2 } from "lucide-react"
-import { useSavedPosts } from "../../../hooks/useSavedPosts"
 import { Loader } from "../../../components/Loader"
 import { ROUTES } from "../../../Routes"
 import { generateCmpLogoUrl } from "../../../utils/generateCmpLogoUrl"
 import { formatDate } from "../../../utils/formatDate"
+import { asyncRunner } from "../../../utils/asyncRunner"
+import { deleteSavedPost, getAllSavedPosts } from "../../../lib/apis"
+import toast from "react-hot-toast"
+import type { SavedJobType } from "../../../types/hooks/useSavedPosts"
 
 export function SavedJobs() {
-    const { savedJobs, loading, getAllPosts, deletePost } = useSavedPosts()
+    const [loading, setLoading] = useState(false)
+    const [savedJobs, setSavedJobs] = useState<SavedJobType[]>([])
     const navigate = useNavigate()
-
-    useEffect(() => {
-        getAllPosts()
-    }, [])
 
     const handleRemove = async (e: React.MouseEvent, jobPostId: string) => {
         e.stopPropagation()
-        await deletePost(jobPostId)
+        setLoading(true)
+        const res = await asyncRunner(deleteSavedPost(jobPostId))
+        console.log('JOBpostId:', jobPostId, "Res:", res)
+
+        if (!res || !res.data) {
+            toast.error('Failed to delete save job post!')
+            setLoading(false)
+            return;
+        }
+
+        setSavedJobs(prev => prev.filter(job => job.jobPostId._id !== jobPostId))
+        toast.success('Post removed from saved posts!')
+        setLoading(false)
     }
+
+    const getSavedPosts = async () => {
+        setLoading(true)
+        const res = await asyncRunner(getAllSavedPosts())
+
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return;
+        }
+
+        setSavedJobs(res.data.data)
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        getSavedPosts()
+    }, [])
 
     return (
         <div className="md:p-10 bg-gray-100">

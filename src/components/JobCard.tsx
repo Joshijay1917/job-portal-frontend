@@ -3,12 +3,14 @@ import { Building2, Clock, Bookmark, BookmarkCheck, IndianRupee, BookCheck } fro
 import type { JobListCardType } from "../types/context/Job.context"
 import { formatDate } from "../utils/formatDate"
 import { generateCmpLogoUrl } from "../utils/generateCmpLogoUrl"
-import { useSavedPosts } from "../hooks/useSavedPosts"
 import { useAuth } from "../context/auth.context"
+import { asyncRunner } from "../utils/asyncRunner"
+import { deleteSavedPost, saveJobPost } from "../lib/apis"
+import toast from "react-hot-toast"
 
 export function JobCard({ job }: { job: JobListCardType }) {
-    const { savePost, deletePost, loading } = useSavedPosts()
     const { isAuthenticated, user } = useAuth()
+    const [loading, setLoading] = useState(false)
     const [saved, setSaved] = useState(job.isSaved ?? false)
 
     const handleToggleSave = async (e: React.MouseEvent) => {
@@ -22,6 +24,38 @@ export function JobCard({ job }: { job: JobListCardType }) {
             const res = await savePost(job._id)
             if (res) setSaved(true)
         }
+    }
+
+    const savePost = async (jobPostId: string) => {
+        setLoading(true)
+        const res = await asyncRunner(saveJobPost(jobPostId))
+
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return false
+        }
+
+        toast.success('Job post saved successfully!')
+        setLoading(false)
+
+        return true
+    }
+
+    const deletePost = async (jobPostId: string) => {
+        setLoading(true)
+        const res = await asyncRunner(deleteSavedPost(jobPostId))
+
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return false
+        }
+
+        toast.success('Job post removed from saved posts!')
+        setLoading(false)
+
+        return true
     }
 
     return (

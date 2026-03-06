@@ -1,15 +1,15 @@
+import type { JobListCardType } from "../context/Job.context";
+
 export type usePublicJobsType = {
   jobs: JobListCardType[];
   totalPages: number;
   page: number;
   loading: boolean;
-  error: string | null;
   getAllJobs: (p: number) => Promise<void>;
   getJobDetails: (id: string) => Promise<JobDetails | null>;
-  onSearch: (search: string) => void;
   filterJobPosts: (filters: FilterJobType, pageNo: number) => Promise<void>;
-  onJobClick: (id: string) => void;
   goTo: (p: number) => void;
+  applyJobPost: (jobPostId: string) => Promise<boolean>
 };
 
 export type FilterJobType = {

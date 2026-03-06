@@ -1,10 +1,28 @@
-import { useEffect } from "react"
-import { useRecruiter } from "../../../hooks/useRecruiter"
+import { useEffect, useState } from "react"
 import { JobCard } from "../../../components/JobCard"
 import { Loader } from "../../../components/Loader"
+import type { JobListCardType } from "../../../types/context/Job.context"
+import { asyncRunner } from "../../../utils/asyncRunner"
+import { getAllPosts } from "../../../lib/apis"
+import toast from "react-hot-toast"
 
 export function PostedJobs() {
-    const { getPostedJobs, jobs, loading } = useRecruiter()
+    const [loading, setLoading] = useState(false)
+    const [jobs, setJobs] = useState<JobListCardType[]>([])
+
+    const getPostedJobs = async () => {
+        setLoading(true)
+        const res = await asyncRunner(getAllPosts())
+
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return;
+        }
+
+        setJobs(res.data.data)
+        setLoading(false)
+    }
 
     useEffect(() => {
         getPostedJobs()

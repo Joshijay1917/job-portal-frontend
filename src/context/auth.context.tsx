@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { LoginFormValues, RegisterFormValues, User } from "../types/auth";
 import type { AuthContextType } from "../types/context/auth.context";
-import { useAsync } from "../hooks/useAsync";
-import { logIn, logoutUser, register, userDetails } from "../services/authService";
+import { logIn, logoutUser, register, userDetails } from "../lib/Apis/authApis";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../Routes";
-import { logger } from "../utils/logger";
+import { asyncRunner } from "../utils/asyncRunner";
+import toast from "react-hot-toast";
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
@@ -20,43 +20,59 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const { run, loading, error } = useAsync()
     const navigate = useNavigate()
     const [user, setUser] = useState<User | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const loginUser = async (data: LoginFormValues) => {
-        const result = await run(logIn(data))
+        setLoading(true)
+        const result = await asyncRunner(logIn(data))
 
-        if (!result) return;
+        if (!result || !result.data) {
+            toast.error(result.error)
+            setLoading(false)
+            return;
+        }
 
         const payload = result.data.data
-        logger.log(payload)
 
         localStorage.setItem("accessToken", payload.accessToken)
         setUser(payload.user)
         setIsAuthenticated(true)
         navigate(ROUTES.HOME)
+        setLoading(false)
     }
 
     const registerUser = async (data: RegisterFormValues) => {
-        const result = await run(register(data))
+        setLoading(true)
+        const result = await asyncRunner(register(data))
 
-        if (!result) {
+        if (!result || !result.data) {
+            toast.error(result.error)
+            setLoading(false)
             return;
         }
 
+        toast.success("User registered successfully")
         navigate(ROUTES.LOGIN)
+        setLoading(false)
     }
 
     const logOutUser = async () => {
-        const res = await run(logoutUser())
+        setLoading(true)
+        const res = await asyncRunner(logoutUser())
 
-        if (!res) return;
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return;
+        }
 
         setUser(null)
         setIsAuthenticated(false)
         localStorage.removeItem('accessToken')
+        setLoading(false)
     }
 
     const restoreSession = async () => {
@@ -67,7 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 setIsAuthenticated(false)
                 return
             }
-            const user = res.data.data
+            const user = res.data
             setUser(user)
             setIsAuthenticated(true)
         } catch (error) {
@@ -85,8 +101,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         loginUser,
         registerUser,
         logOutUser,
-        loading,
-        error
+        loading
     }
 
     return (

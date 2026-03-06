@@ -1,21 +1,40 @@
-import { useEffect } from "react"
-import { useRecruiter } from "../../../hooks/useRecruiter"
-import { Status } from "../../../types/hooks/useRecruiter.d"
+import { useEffect, useState } from "react"
+import { Status, type ApplicationType } from "../../../types/hooks/useRecruiter.d"
 import { Loader } from "../../../components/Loader"
+import { asyncRunner } from "../../../utils/asyncRunner"
+import { getAllApplicants, updateAppStatus } from "../../../lib/apis"
+import toast from "react-hot-toast"
 
 export function Candidates() {
-    const { applications, loading, getAllCandidates, updateStatus } = useRecruiter()
-
-    useEffect(() => {
-        getAllCandidates()
-    }, [])
+    const [loading, setLoading] = useState(false)
+    const [applications, setApplications] = useState<ApplicationType[]>([])
 
     const handleUpdateStatus = async (appId: string, status: Status) => {
-        const success = await updateStatus(appId, status)
+        setLoading(true)
+        const res = await asyncRunner(updateAppStatus(appId, status))
 
-        if (success) {
-            getAllCandidates()
+        if (!res || !res.data) {
+            toast.error('Failed to update status!')
+            setLoading(false)
+            return;
         }
+
+        toast.success('Update status successfully!')
+        setLoading(false)
+    }
+
+    const getAllCandidates = async () => {
+        setLoading(true)
+        const res = await asyncRunner(getAllApplicants())
+
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return;
+        }
+
+        setApplications(res.data.data)
+        setLoading(false)
     }
 
     const getStatusStyle = (status: Status) => {
@@ -28,6 +47,10 @@ export function Candidates() {
                 return "bg-blue-50 text-blue-600"
         }
     }
+
+    useEffect(() => {
+        getAllCandidates()
+    }, [])
 
     return (
         <div className='md:p-10 bg-gray-100'>

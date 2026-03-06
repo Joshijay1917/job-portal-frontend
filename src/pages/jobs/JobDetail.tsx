@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import type { JobDetails } from "../../types/hooks/useJobs"
 import { useJobs } from "../../context/jobs.context"
-import { useCandidate } from "../../hooks/useCandidate"
 import { useAuth } from "../../context/auth.context"
 import { formatSalary } from "../../utils/formatSalary"
 import { formatDate } from "../../utils/formatDate"
@@ -13,8 +12,7 @@ import JobDetailSkeletonLoading from "./JobDetailSkeletonLoading"
 export function JobDetail() {
     const { id } = useParams()
     const { user } = useAuth()
-    const { getJobDetails, loading } = useJobs()
-    const usecandidate = useCandidate()
+    const { getJobDetails, loading, applyJobPost } = useJobs()
     const [jobDetails, setJobDetails] = useState<JobDetails>({
         jobPost: {
             _id: '',
@@ -44,9 +42,9 @@ export function JobDetail() {
     }
 
     const handleApply = async () => {
-        if (!jobDetails.jobPost._id) return
+        if (!jobDetails.jobPost._id) return;
 
-        const success = await usecandidate.applyJobPost(jobDetails.jobPost._id)
+        const success = await applyJobPost(jobDetails.jobPost._id)
 
         if (success) {
             setJobDetails(prev => ({
@@ -154,13 +152,13 @@ export function JobDetail() {
                 <div className="max-w-4xl mx-auto px-5 mt-8 flex justify-center">
                     <button
                         onClick={() => handleApply()}
-                        disabled={jobDetails.hasApplied || usecandidate.loading}
+                        disabled={jobDetails.hasApplied || loading}
                         className={`inline-flex items-center gap-2.5 px-10 py-3 text-base md:text-lg font-semibold rounded-xl transition-colors cursor-pointer ${jobDetails.hasApplied
                             ? "bg-green-600 text-white cursor-not-allowed opacity-70"
                             : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
                             } disabled:cursor-not-allowed`}
                     >
-                        {usecandidate.loading && <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+                        {loading && <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                         {jobDetails.hasApplied && <Check size={18} />}
                         {jobDetails.hasApplied ? "Applied" : "Apply Now"}
                     </button>

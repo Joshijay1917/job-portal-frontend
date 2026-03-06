@@ -9,7 +9,6 @@ import { ROUTES } from "../../Routes"
 import { SidebarFilters } from "../../components/SidebarFilters"
 import { useJobs } from "../../context/jobs.context"
 import { Search } from "lucide-react"
-import { logger } from "../../utils/logger"
 
 export function Jobs() {
     const [search] = useSearchParams()
@@ -29,12 +28,9 @@ export function Jobs() {
     }
 
     useEffect(() => {
-        logger.log('Mountend!')
         if (searchJob) {
-            logger.log('SearchJob')
             filterJobPosts({ search: searchJob }, page)
         } else {
-            logger.log('Get All')
             getAllJobs(page)
         }
     }, [searchJob, page])

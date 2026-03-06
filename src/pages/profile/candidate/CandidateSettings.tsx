@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { Lock, Trash2, Eye, EyeOff, User, Mail, Shield } from "lucide-react"
 import { useAuth } from "../../../context/auth.context"
-import { useCandidate } from "../../../hooks/useCandidate"
+import { useUser } from "../../../context/user.context"
 
 export function CandidateSettings() {
     const { logOutUser, user } = useAuth()
-    const { changePassword, loading } = useCandidate()
+    const { changePassword, loading } = useUser()
 
     // Change Password
     const [passwords, setPasswords] = useState({ current: "", newPass: "", confirm: "" })

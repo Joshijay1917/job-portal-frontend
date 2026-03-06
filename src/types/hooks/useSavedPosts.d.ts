@@ -9,7 +9,6 @@ export type SavedJobType = {
 
 export type useSavedPostsType = {
     loading: boolean
-    error: string | null
     savedJobs: SavedJobType[]
     getAllPosts: () => Promise<void>
     savePost: (jobPostId: string) => Promise<boolean>

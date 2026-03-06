@@ -2,11 +2,14 @@ import { useForm } from "react-hook-form"
 import type { PostJobType } from "../../../types/dashboard/recruiter"
 import { InputField } from "../../../components/InputField"
 import { categories, JobType } from "../../../utils/constants"
-import { useRecruiter } from "../../../hooks/useRecruiter"
 import { Loader } from "../../../components/Loader"
+import { useState } from "react"
+import { asyncRunner } from "../../../utils/asyncRunner"
+import toast from "react-hot-toast"
+import { postJob } from "../../../lib/apis"
 
 export function PostJob() {
-    const { postJob, loading, error } = useRecruiter()
+    const [loading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -24,10 +27,20 @@ export function PostJob() {
                 : []
         }
 
-        await postJob(formattedData)
+        setLoading(true)
+        const res = await asyncRunner(postJob(formattedData))
+
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return
+        }
+
+        toast.success('Job post created successfully!')
+        setLoading(false)
     }
 
-    return loading ? <Loader /> : error ? <span>{error}</span> : (
+    return loading ? <Loader /> : (
         <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-10">
             <h2 className="text-xl md:text-2xl font-bold mb-6">Post a New Job</h2>
 

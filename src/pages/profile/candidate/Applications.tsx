@@ -1,20 +1,20 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Building2, Clock, MapPin } from "lucide-react"
-import { useCandidate } from "../../../hooks/useCandidate"
 import { Loader } from "../../../components/Loader"
 import { Status } from "../../../types/hooks/useRecruiter.d"
 import { ROUTES } from "../../../Routes"
 import { generateCmpLogoUrl } from "../../../utils/generateCmpLogoUrl"
 import { formatDate } from "../../../utils/formatDate"
+import type { CandidateApplicationType } from "../../../types/hooks/useCandidate"
+import { asyncRunner } from "../../../utils/asyncRunner"
+import { getAppliedJobs } from "../../../lib/apis"
+import toast from "react-hot-toast"
 
 export function Applications() {
-    const { applications, loading, getAppliedJobs } = useCandidate()
+    const [loading, setLoading] = useState(false)
+    const [applications, setApplications] = useState<CandidateApplicationType[]>([])
     const navigate = useNavigate()
-
-    useEffect(() => {
-        getAppliedJobs()
-    }, [])
 
     const getStatusStyle = (status: Status) => {
         switch (status) {
@@ -28,6 +28,24 @@ export function Applications() {
                 return "bg-gray-100 text-gray-600"
         }
     }
+
+    const getAppliedJob = async () => {
+        setLoading(true)
+        const res = await asyncRunner(getAppliedJobs())
+
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return;
+        }
+
+        setApplications(res.data.data)
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        getAppliedJob()
+    }, [])
 
     return (
         <div className="md:p-10 bg-gray-100">

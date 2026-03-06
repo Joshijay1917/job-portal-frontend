@@ -7,5 +7,4 @@ type AuthContextType = {
     registerUser: (data: RegisterFormValues) => Promise<void>
     logOutUser: () => Promise<void>
     loading: boolean
-    error: string | null
 }

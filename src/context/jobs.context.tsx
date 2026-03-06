@@ -1,11 +1,11 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAsync } from "../hooks/useAsync";
-import { FilterJobs, getAllJobPosts, getJobData } from "../services/jobService";
+import { ApplyJobPost, FilterJobs, getAllJobPosts, getJobData } from "../lib/Apis/jobApis";
 import type { JobListCardType } from "../types/context/Job.context";
 import type { FilterJobType, usePublicJobsType } from "../types/hooks/useJobs";
-import { ROUTES } from "../Routes";
 import { scrollToTop } from "../utils/scrollToTop";
+import { asyncRunner } from "../utils/asyncRunner";
+import toast from "react-hot-toast";
+import { useAuth } from "./auth.context";
 
 const JobsContext = createContext<usePublicJobsType | null>(null)
 
@@ -20,53 +20,58 @@ export const useJobs = () => {
 }
 
 export const JobsProvider = ({ children }: { children: ReactNode }) => {
-    const navigate = useNavigate();
-    const { run, loading, error } = useAsync();
-
+    const { user } = useAuth()
+    const [loading, setLoading] = useState(false)
     const [jobs, setJobs] = useState<JobListCardType[]>([])
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(1);
 
     const getAllJobs = async (p: number) => {
         setJobs([])
+        setLoading(true)
         scrollToTop()
-        const res = await run(getAllJobPosts(p));
-        if (!res) return;
+        const res = await asyncRunner(getAllJobPosts(p));
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return;
+        }
 
         setTotalPages(res.data.data.totalPages);
         setJobs(res.data.data.posts);
+        setLoading(false)
     };
 
     const getJobDetails = async (id: string) => {
-        const res = await run(getJobData(id))
+        setLoading(true)
+        const res = await asyncRunner(getJobData(id))
 
-        if (!res) return;
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
+            return null;
+        }
 
         const payload = res.data.data
+        setLoading(false)
         return payload
     }
 
-    const onSearch = (search: string) => {
-        navigate(ROUTES.JOB_SEARCH(search));
-        filterJobPosts({ search }, 1);
-    };
-
     const filterJobPosts = async (filters: FilterJobType, pageNo: number) => {
         setJobs([])
+        setLoading(true)
         scrollToTop()
-        const res = await run(FilterJobs(filters, pageNo));
-        if (!res) {
-            setJobs([]);
+        const res = await asyncRunner(FilterJobs(filters, pageNo));
+        if (!res || !res.data) {
+            toast.error(res.error)
+            setLoading(false)
             return;
         }
 
         setPage(pageNo);
         setTotalPages(res.data.data.totalPages);
         setJobs(res.data.data.posts);
-    };
-
-    const onJobClick = (id: string) => {
-        navigate(ROUTES.JOB_DETAIL(id));
+        setLoading(false)
     };
 
     const goTo = (p: number) => {
@@ -74,9 +79,28 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
         setPage(p);
     };
 
+    const applyJobPost = async (jobPostId: string) => {
+        if (!jobPostId || !user?.id) {
+            toast.error('User not resgistered!')
+            return false;
+        }
+
+        setLoading(true)
+        const res = await asyncRunner(ApplyJobPost(user.id, jobPostId))
+
+        if (!res || !res.data) {
+            toast.error("Failed to apply to job post!")
+            setLoading(false)
+            return false;
+        }
+
+        setLoading(false)
+        return true;
+    }
+
     const values = {
-        jobs, totalPages, page, loading, error,
-        getAllJobs, getJobDetails, onSearch, filterJobPosts, onJobClick, goTo
+        jobs, totalPages, page, loading,
+        getAllJobs, getJobDetails, filterJobPosts, goTo, applyJobPost
     }
 
     return (

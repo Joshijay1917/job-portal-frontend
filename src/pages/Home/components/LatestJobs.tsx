@@ -3,11 +3,9 @@ import { useJobs } from "../../../context/jobs.context"
 import { useEffect, useState } from "react"
 import { Loader } from "../../../components/Loader"
 import { formatDate } from "../../../utils/formatDate"
-import { useCandidate } from "../../../hooks/useCandidate"
 
 export function LatestJobs() {
-    const { jobs, loading, getAllJobs } = useJobs()
-    const usecandidate = useCandidate()
+    const { jobs, loading, getAllJobs, applyJobPost } = useJobs()
     const [applyingJobId, setApplyingJobId] = useState<string | null>(null)
 
     useEffect(() => {
@@ -16,7 +14,7 @@ export function LatestJobs() {
 
     const handleApply = async (jobId: string) => {
         setApplyingJobId(jobId)
-        await usecandidate.applyJobPost(jobId)
+        await applyJobPost(jobId)
         setApplyingJobId(null)
     }
 
@@ -28,7 +26,7 @@ export function LatestJobs() {
                 <p className="text-gray-500 text-center mb-8">Fresh opportunities posted recently</p>
 
                 <div className='flex flex-col gap-4'>
-                    {loading ? <Loader /> : jobs.slice(5).map((job) => (
+                    {loading ? <Loader /> : jobs && jobs.slice(5).map((job) => (
                         <div key={job._id} className='bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 p-5 md:p-6'>
                             <div className='flex flex-col gap-1 mb-4 pb-3 border-b border-gray-100'>
                                 <h3 className='text-xl md:text-2xl font-bold'>{job.title}</h3>
