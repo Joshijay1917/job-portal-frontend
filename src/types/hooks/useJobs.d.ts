@@ -5,6 +5,7 @@ export type usePublicJobsType = {
   totalPages: number;
   page: number;
   loading: boolean;
+  error: string | null;
   getAllJobs: (p: number) => Promise<void>;
   getJobDetails: (id: string) => Promise<JobDetails | null>;
   filterJobPosts: (filters: FilterJobType, pageNo: number) => Promise<void>;

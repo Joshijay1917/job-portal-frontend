@@ -9,10 +9,11 @@ import { formatDate } from "../../../utils/formatDate"
 import type { CandidateApplicationType } from "../../../types/hooks/useCandidate"
 import { asyncRunner } from "../../../utils/asyncRunner"
 import { getAppliedJobs } from "../../../lib/apis"
-import toast from "react-hot-toast"
+import { Retry } from "../../../components/Retry"
 
 export function Applications() {
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
     const [applications, setApplications] = useState<CandidateApplicationType[]>([])
     const navigate = useNavigate()
 
@@ -34,7 +35,7 @@ export function Applications() {
         const res = await asyncRunner(getAppliedJobs())
 
         if (!res || !res.data) {
-            toast.error(res.error)
+            setError(res.error)
             setLoading(false)
             return;
         }
@@ -52,6 +53,8 @@ export function Applications() {
             <h1 className="text-xl md:text-3xl font-bold mb-6">My Applications</h1>
 
             {loading && <Loader />}
+
+            {!loading && error && <Retry onRetry={() => getAppliedJob()} />}
 
             {!loading && applications.length === 0 && (
                 <div className="bg-white rounded-2xl p-10 text-center">

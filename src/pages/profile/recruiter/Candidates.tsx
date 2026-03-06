@@ -4,9 +4,11 @@ import { Loader } from "../../../components/Loader"
 import { asyncRunner } from "../../../utils/asyncRunner"
 import { getAllApplicants, updateAppStatus } from "../../../lib/apis"
 import toast from "react-hot-toast"
+import { Retry } from "../../../components/Retry"
 
 export function Candidates() {
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
     const [applications, setApplications] = useState<ApplicationType[]>([])
 
     const handleUpdateStatus = async (appId: string, status: Status) => {
@@ -28,7 +30,7 @@ export function Candidates() {
         const res = await asyncRunner(getAllApplicants())
 
         if (!res || !res.data) {
-            toast.error(res.error)
+            setError(res.error)
             setLoading(false)
             return;
         }
@@ -58,6 +60,7 @@ export function Candidates() {
 
             <div className="flex flex-col gap-4">
                 {loading && <Loader />}
+                {!loading && error && <Retry onRetry={() => getAllCandidates()} />}
                 {!loading && applications.length === 0 && (
                     <div className="bg-white rounded-xl border border-gray-100 p-10 text-center">
                         <p className="text-gray-500">No candidates found!</p>

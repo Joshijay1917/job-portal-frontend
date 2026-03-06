@@ -8,11 +8,12 @@ import { formatSalary } from "../../utils/formatSalary"
 import { formatDate } from "../../utils/formatDate"
 import { generateCmpLogoUrl } from "../../utils/generateCmpLogoUrl"
 import JobDetailSkeletonLoading from "./JobDetailSkeletonLoading"
+import { Retry } from "../../components/Retry"
 
 export function JobDetail() {
     const { id } = useParams()
     const { user } = useAuth()
-    const { getJobDetails, loading, applyJobPost } = useJobs()
+    const { getJobDetails, loading, error, applyJobPost } = useJobs()
     const [jobDetails, setJobDetails] = useState<JobDetails>({
         jobPost: {
             _id: '',
@@ -69,6 +70,8 @@ export function JobDetail() {
         { icon: <Clock size={18} />, label: "Type", value: job.type, color: "bg-gray-50 text-gray-600" },
         { icon: <IndianRupee size={18} />, label: "Salary", value: formatSalary(job.salary), color: "bg-green-50 text-green-600" },
     ]
+
+    if (!loading && error) return <Retry onRetry={() => handleJobDetailsFetch()} />
 
     return (
         <div className="bg-gray-100 min-h-screen pb-16">

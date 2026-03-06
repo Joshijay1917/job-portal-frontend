@@ -2,9 +2,9 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import { Eye, EyeOff } from "lucide-react"
-import { Role, type RegisterFormValues } from "../../types/auth.d"
 import { useAuth } from "../../context/auth.context"
 import { ROUTES } from "../../Routes"
+import { Role, type RegisterFormValues } from "../../types/auth.d"
 
 export function SignUp() {
     const { registerUser, loading, error } = useAuth()

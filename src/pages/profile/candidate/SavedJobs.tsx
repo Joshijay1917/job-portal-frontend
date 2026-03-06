@@ -9,9 +9,11 @@ import { asyncRunner } from "../../../utils/asyncRunner"
 import { deleteSavedPost, getAllSavedPosts } from "../../../lib/apis"
 import toast from "react-hot-toast"
 import type { SavedJobType } from "../../../types/hooks/useSavedPosts"
+import { Retry } from "../../../components/Retry"
 
 export function SavedJobs() {
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
     const [savedJobs, setSavedJobs] = useState<SavedJobType[]>([])
     const navigate = useNavigate()
 
@@ -19,10 +21,9 @@ export function SavedJobs() {
         e.stopPropagation()
         setLoading(true)
         const res = await asyncRunner(deleteSavedPost(jobPostId))
-        console.log('JOBpostId:', jobPostId, "Res:", res)
 
         if (!res || !res.data) {
-            toast.error('Failed to delete save job post!')
+            setError(res.error)
             setLoading(false)
             return;
         }
@@ -37,7 +38,7 @@ export function SavedJobs() {
         const res = await asyncRunner(getAllSavedPosts())
 
         if (!res || !res.data) {
-            toast.error(res.error)
+            setError(res.error)
             setLoading(false)
             return;
         }
@@ -55,6 +56,8 @@ export function SavedJobs() {
             <h1 className="text-xl md:text-3xl font-bold mb-6">Saved Jobs</h1>
 
             {loading && <Loader />}
+
+            {!loading && error && <Retry onRetry={() => getSavedPosts()} />}
 
             {!loading && savedJobs.length === 0 && (
                 <div className="bg-white rounded-2xl p-10 text-center">

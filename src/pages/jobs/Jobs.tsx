@@ -9,12 +9,13 @@ import { ROUTES } from "../../Routes"
 import { SidebarFilters } from "../../components/SidebarFilters"
 import { useJobs } from "../../context/jobs.context"
 import { Search } from "lucide-react"
+import { Retry } from "../../components/Retry"
 
 export function Jobs() {
     const [search] = useSearchParams()
     const navigate = useNavigate()
     const { user } = useAuth()
-    const { jobs, loading, getAllJobs, totalPages, page, goTo, filterJobPosts } = useJobs()
+    const { jobs, loading, error, getAllJobs, totalPages, page, goTo, filterJobPosts } = useJobs()
     const [filterOpen, setFilterOpen] = useState(false)
     const [searchJob, setSearchJob] = useState<string | null>(null)
 
@@ -70,7 +71,8 @@ export function Jobs() {
                     <div className="flex flex-col gap-5">
                         {loading && <div className="mt-50"><Loader /></div>}
                         {!loading && jobs.length === 0 && <span className="text-center">No jobs found!</span>}
-                        {jobs.map((job: JobListCardType) => (
+                        {!loading && error && <Retry onRetry={() => getAllJobs(page)} />}
+                        {jobs && jobs.map((job: JobListCardType) => (
                             <div key={job._id} onClick={() => navigate(ROUTES.JOB_DETAIL(job._id))}>
                                 <JobCard job={job} />
                             </div>

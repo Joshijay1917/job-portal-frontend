@@ -22,6 +22,7 @@ export const useJobs = () => {
 export const JobsProvider = ({ children }: { children: ReactNode }) => {
     const { user } = useAuth()
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
     const [jobs, setJobs] = useState<JobListCardType[]>([])
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(1);
@@ -32,7 +33,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
         scrollToTop()
         const res = await asyncRunner(getAllJobPosts(p));
         if (!res || !res.data) {
-            toast.error(res.error)
+            setError(res.error)
             setLoading(false)
             return;
         }
@@ -47,7 +48,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
         const res = await asyncRunner(getJobData(id))
 
         if (!res || !res.data) {
-            toast.error(res.error)
+            setError(res.error)
             setLoading(false)
             return null;
         }
@@ -63,7 +64,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
         scrollToTop()
         const res = await asyncRunner(FilterJobs(filters, pageNo));
         if (!res || !res.data) {
-            toast.error(res.error)
+            setError(res.error)
             setLoading(false)
             return;
         }
@@ -89,7 +90,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
         const res = await asyncRunner(ApplyJobPost(user.id, jobPostId))
 
         if (!res || !res.data) {
-            toast.error("Failed to apply to job post!")
+            setError("Failed to apply to job post!")
             setLoading(false)
             return false;
         }
@@ -99,7 +100,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const values = {
-        jobs, totalPages, page, loading,
+        jobs, totalPages, page, loading, error,
         getAllJobs, getJobDetails, filterJobPosts, goTo, applyJobPost
     }
 
