@@ -12,12 +12,12 @@ import { UserProvider } from './context/user.context'
 import { Toaster } from 'react-hot-toast'
 import { NotFound } from './components/NotFound'
 import { JobsProvider } from './context/jobs.context'
-import { Login } from './pages/auth/Login'
-import { SignUp } from './pages/auth/SignUp'
-import { About } from './pages/about/About'
-import { Contact } from './pages/contact/Contact'
-import { Privacy } from './pages/privacy/Privacy'
-import { Terms } from './pages/terms/Terms'
+import { Login } from './pages/Auth/Login'
+import { SignUp } from './pages/Auth/SignUp'
+import { About } from './pages/About/About'
+import { Contact } from './pages/Contact/Contact'
+import { Privacy } from './pages/Privacy/Privacy'
+import { Terms } from './pages/Terms/Terms'
 
 function App() {
 

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useCallback, useState, type ReactNode } from "react";
 import toast from "react-hot-toast";
 import { asyncRunner } from "../utils/asyncRunner";
 import type { CandidateForm, RecruiterForm, userContextType } from "../types/context/user.context";
@@ -6,23 +6,13 @@ import type { Recruiter } from "../types/dashboard/recruiter";
 import type { Candidate } from "../types/dashboard/candidate";
 import { changeUserPassword, getUserDetails, updateDetails } from "../lib/apis";
 
-const userContext = createContext<userContextType | null>(null)
-
-export const useUser = () => {
-    const context = useContext(userContext)
-
-    if (!context) {
-        throw Error("User context must be wrapped inside userContext!")
-    }
-
-    return context
-}
+export const userContext = createContext<userContextType | null>(null)
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<Recruiter | Candidate>()
     const [loading, setLoading] = useState(false)
 
-    const getUser = async () => {
+    const getUser = useCallback(async () => {
         setLoading(true)
         const res = await asyncRunner(getUserDetails())
         if (!res || !res.data) {
@@ -33,7 +23,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
         setUser(res.data.data)
         setLoading(false)
-    }
+    }, [])
 
     const updateUser = async (user: RecruiterForm | CandidateForm) => {
         setLoading(true)

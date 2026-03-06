@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Building2, Clock, MapPin } from "lucide-react"
 import { Loader } from "../../../components/Loader"
@@ -30,7 +30,7 @@ export function Applications() {
         }
     }
 
-    const getAppliedJob = async () => {
+    const getAppliedJob = useCallback(async () => {
         setLoading(true)
         const res = await asyncRunner(getAppliedJobs())
 
@@ -42,11 +42,15 @@ export function Applications() {
 
         setApplications(res.data.data)
         setLoading(false)
-    }
+    }, [])
 
     useEffect(() => {
-        getAppliedJob()
-    }, [])
+        const fetchData = async () => {
+            await getAppliedJob()
+        }
+
+        fetchData()
+    }, [getAppliedJob])
 
     return (
         <div className="md:p-10 bg-gray-100">

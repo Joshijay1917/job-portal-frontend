@@ -1,5 +1,7 @@
 import { Github, Linkedin, Twitter } from 'lucide-react'
 import { Logo } from './Logo'
+import { Link } from 'react-router-dom'
+import { ROUTES } from '../Routes'
 
 export function Footer() {
     return (
@@ -13,18 +15,18 @@ export function Footer() {
 
                 <div className="flex flex-col gap-3">
                     <h3 className="text-white font-semibold mb-2">Company</h3>
-                    <a href="/about" className="hover:text-white">About</a>
-                    <a href="/contact" className="hover:text-white">Contact</a>
-                    <a href="/privacy" className="hover:text-white">Privacy Policy</a>
-                    <a href="/terms" className="hover:text-white">Terms</a>
+                    <Link to={ROUTES.ABOUT} className="hover:text-white">About</Link>
+                    <Link to={ROUTES.CONTACT} className="hover:text-white">Contact</Link>
+                    <Link to={ROUTES.PRIVACY} className="hover:text-white">Privacy Policy</Link>
+                    <Link to={ROUTES.TERMS} className="hover:text-white">Terms</Link>
                 </div>
 
                 <div>
                     <h3 className="text-white font-semibold mb-3">Connect</h3>
                     <div className="flex justify-center gap-4 mb-4">
-                        <a href="#"><Linkedin /></a>
-                        <a href="#"><Twitter /></a>
-                        <a href="#"><Github /></a>
+                        <Link to="#"><Linkedin /></Link>
+                        <Link to="#"><Twitter /></Link>
+                        <Link to="#"><Github /></Link>
                     </div>
                 </div>
             </div>

@@ -1,12 +1,12 @@
 import { useState } from "react"
 import { Building2, Clock, Bookmark, BookmarkCheck, IndianRupee, BookCheck } from "lucide-react"
 import type { JobListCardType } from "../types/context/Job.context"
-import { formatDate } from "../utils/formatDate"
-import { generateCmpLogoUrl } from "../utils/generateCmpLogoUrl"
-import { useAuth } from "../context/auth.context"
 import { asyncRunner } from "../utils/asyncRunner"
 import { deleteSavedPost, saveJobPost } from "../lib/apis"
 import toast from "react-hot-toast"
+import { useAuth } from "../hooks/useAuth"
+import { formatDate } from "../utils/formatDate"
+import { generateCmpLogoUrl } from "../utils/generateCmpLogoUrl"
 
 export function JobCard({ job }: { job: JobListCardType }) {
     const { isAuthenticated, user } = useAuth()

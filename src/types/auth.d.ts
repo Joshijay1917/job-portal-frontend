@@ -23,14 +23,3 @@ type User = {
     role: Role;
     email_verified: boolean;
 }
-
-type AuthBody = {
-    user: User;
-    accessToken?: string;
-}
-
-type AuthResponse = {
-    statusCode: number;
-    data: AuthBody;
-    message: string;
-}

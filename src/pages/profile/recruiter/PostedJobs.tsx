@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { JobCard } from "../../../components/JobCard"
 import { Loader } from "../../../components/Loader"
 import { Retry } from "../../../components/Retry"
@@ -11,7 +11,7 @@ export function PostedJobs() {
     const [error, setError] = useState<string | null>(null)
     const [jobs, setJobs] = useState<JobListCardType[]>([])
 
-    const getPostedJobs = async () => {
+    const getPostedJobs = useCallback(async () => {
         setLoading(true)
         const res = await asyncRunner(getAllPosts())
 
@@ -23,11 +23,15 @@ export function PostedJobs() {
 
         setJobs(res.data.data)
         setLoading(false)
-    }
+    }, [])
 
     useEffect(() => {
-        getPostedJobs()
-    }, [])
+        const fetchData = async () => {
+            await getPostedJobs()
+        }
+
+        fetchData()
+    }, [getPostedJobs])
 
     return (
         <div className='md:p-10 bg-gray-100'>

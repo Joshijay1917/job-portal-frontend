@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import { Eye, EyeOff } from "lucide-react"
-import { useAuth } from "../../context/auth.context"
+import { useAuth } from "../../hooks/useAuth"
 import { ROUTES } from "../../Routes"
 import { Role, type RegisterFormValues } from "../../types/auth.d"
 
@@ -37,7 +37,7 @@ export function SignUp() {
                 {/* Right Side Form */}
                 <div className="w-full md:w-1/2 p-10">
                     <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-                        Welcome to <p className="text-blue-600">JobPortal</p> 👋
+                        Welcome to <div className="text-blue-600">JobPortal</div> 👋
                     </h1>
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

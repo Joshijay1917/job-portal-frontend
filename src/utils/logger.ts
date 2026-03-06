@@ -1,14 +1,14 @@
 export const logger = {
-    log: (...args: any[]) => {
+    log: (...args: unknown[]) => {
         if (import.meta.env.DEV) console.log(...args)
     },
-    error: (...args: any[]) => {
+    error: (...args: unknown[]) => {
         if (import.meta.env.DEV) console.error(...args)
     },
-    warn: (...args: any[]) => {
+    warn: (...args: unknown[]) => {
         if (import.meta.env.DEV) console.warn(...args)
     },
-    info: (...args: any[]) => {
+    info: (...args: unknown[]) => {
         if (import.meta.env.DEV) console.info(...args)
     },
 }

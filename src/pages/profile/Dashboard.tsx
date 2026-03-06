@@ -6,7 +6,6 @@ import { RecruiterProfile } from './recruiter/RecruiterProfile'
 import { CandidateRoute } from '../../components/routes/CandidateRoute'
 import { RecruiterRoute } from '../../components/routes/RecruiterRoute'
 import { DashboardTabs } from './DashboardTabs'
-import { useAuth } from '../../context/auth.context'
 import { PostJob } from './recruiter/PostJob'
 import { PostedJobs } from './recruiter/PostedJobs'
 import { Candidates } from './recruiter/Candidates'
@@ -14,6 +13,7 @@ import { Settings } from './recruiter/Settings'
 import { Applications } from './candidate/Applications'
 import { SavedJobs } from './candidate/SavedJobs'
 import { CandidateSettings } from './candidate/CandidateSettings'
+import { useAuth } from '../../hooks/useAuth'
 
 export function Dashboard() {
     const [editMode, setEditMode] = useState<boolean>(false)
@@ -37,8 +37,8 @@ export function Dashboard() {
                 <button
                     onClick={() => setEditMode(!editMode)}
                     className={`p-2.5 md:p-3 rounded-xl transition-colors cursor-pointer ${editMode
-                            ? 'bg-gray-800 text-white'
-                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                        ? 'bg-gray-800 text-white'
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
                         }`}
                     title={editMode ? "Cancel editing" : "Edit profile"}
                 >

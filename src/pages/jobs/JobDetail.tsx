@@ -1,16 +1,17 @@
 import { Building2, ChartNoAxesGantt, Check, Clock, IndianRupee, MapPin, User } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useParams } from "react-router-dom"
 import type { JobDetails } from "../../types/hooks/useJobs"
-import { useJobs } from "../../context/jobs.context"
-import { useAuth } from "../../context/auth.context"
 import { formatSalary } from "../../utils/formatSalary"
 import { formatDate } from "../../utils/formatDate"
 import { generateCmpLogoUrl } from "../../utils/generateCmpLogoUrl"
 import JobDetailSkeletonLoading from "./JobDetailSkeletonLoading"
 import { Retry } from "../../components/Retry"
+import { useAuth } from "../../hooks/useAuth"
+import { useJobs } from "../../hooks/useJobs"
 
 export function JobDetail() {
+    const now = useMemo(() => Date.now().toString(), [])
     const { id } = useParams()
     const { user } = useAuth()
     const { getJobDetails, loading, error, applyJobPost } = useJobs()
@@ -28,8 +29,8 @@ export function JobDetail() {
             category: "",
             type: "",
             location: "",
-            createdAt: Date.now().toString(),
-            updatedAt: Date.now().toString()
+            createdAt: now,
+            updatedAt: now
         },
         hasApplied: false
     })

@@ -1,4 +1,4 @@
-import type { AuthResponse, LoginFormValues, RegisterFormValues, User } from "../auth"
+import type { LoginFormValues, RegisterFormValues, User } from "../auth"
 
 type AuthContextType = {
     user: User | null

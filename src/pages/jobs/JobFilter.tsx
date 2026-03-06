@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
 import { Brain, ChevronsLeftRightEllipsis, Clock, Database, Laptop, LayoutPanelLeft, MoveRight, Search, TabletSmartphone, Timer, UsersRound } from "lucide-react"
+import { useEffect, useState } from "react"
 import { Categories, JobType } from "../../utils/constants"
 import { scrollToTop } from "../../utils/scrollToTop"
-import { useJobs } from "../../context/jobs.context"
+import { useJobs } from "../../hooks/useJobs"
 
 type catType = {
     id: number,

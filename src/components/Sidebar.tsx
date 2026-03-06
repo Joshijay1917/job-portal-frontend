@@ -1,8 +1,8 @@
 import { X, Home, Briefcase, Info, Phone, LogOut, User } from "lucide-react"
 import { Link } from "react-router-dom"
 import { Logo } from "./Logo"
-import { useAuth } from "../context/auth.context"
 import { ROUTES } from "../Routes"
+import { useAuth } from "../hooks/useAuth"
 
 interface SidebarProps {
     isOpen: boolean

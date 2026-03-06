@@ -1,6 +1,3 @@
-import type { JobListCardType } from "../context/Job.context"
-import type { PostJobType } from "../dashboard/recruiter"
-
 export type useRecruiterType = {
     loading: boolean
     applications: ApplicationType[]

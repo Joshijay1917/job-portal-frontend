@@ -1,4 +1,6 @@
 function JobDetailSkeletonLoading() {
+    const randomWidth = 70 + Math.random() * 25
+
     return (
         <div className="bg-gray-100 min-h-screen pb-16 animate-pulse">
             {/* Header Skeleton */}
@@ -51,7 +53,7 @@ function JobDetailSkeletonLoading() {
                         {[...Array(4)].map((_, i) => (
                             <div key={i} className="flex items-center gap-2.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-gray-200 flex-shrink-0" />
-                                <div className="h-4 bg-gray-200 rounded-full" style={{ width: `${70 + Math.random() * 25}%` }} />
+                                <div className="h-4 bg-gray-200 rounded-full" style={{ width: `${randomWidth}%` }} />
                             </div>
                         ))}
                     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Building2, Clock, Trash2 } from "lucide-react"
 import { Loader } from "../../../components/Loader"
@@ -33,7 +33,7 @@ export function SavedJobs() {
         setLoading(false)
     }
 
-    const getSavedPosts = async () => {
+    const getSavedPosts = useCallback(async () => {
         setLoading(true)
         const res = await asyncRunner(getAllSavedPosts())
 
@@ -45,11 +45,15 @@ export function SavedJobs() {
 
         setSavedJobs(res.data.data)
         setLoading(false)
-    }
+    }, [])
 
     useEffect(() => {
-        getSavedPosts()
-    }, [])
+        const fetchData = async () => {
+            await getSavedPosts()
+        }
+
+        fetchData()
+    }, [getSavedPosts])
 
     return (
         <div className="md:p-10 bg-gray-100">

@@ -2,12 +2,12 @@ import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import type { JobListCardType } from "../../types/context/Job.context"
 import { Loader } from "../../components/Loader"
-import { useAuth } from "../../context/auth.context"
 import { JobFilter } from "./JobFilter"
 import { JobCard } from "../../components/JobCard"
 import { ROUTES } from "../../Routes"
 import { SidebarFilters } from "../../components/SidebarFilters"
-import { useJobs } from "../../context/jobs.context"
+import { useAuth } from "../../hooks/useAuth"
+import { useJobs } from "../../hooks/useJobs"
 import { Search } from "lucide-react"
 import { Retry } from "../../components/Retry"
 
@@ -34,7 +34,7 @@ export function Jobs() {
         } else {
             getAllJobs(page)
         }
-    }, [searchJob, page])
+    }, [searchJob, page, getAllJobs, filterJobPosts])
 
     return (
         <div className="p-4 md:p-10 md:p-20 md:px-50 bg-gray-100">

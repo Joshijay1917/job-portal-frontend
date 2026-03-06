@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form"
 import { InputField } from "../../../components/InputField"
-import { useUser } from "../../../context/user.context"
 import { useEffect, type Dispatch, type SetStateAction } from "react"
 import { Loader } from "../../../components/Loader"
 import type { RecruiterForm } from "../../../types/context/user.context"
 import { categories } from "../../../utils/constants"
+import { useUser } from "../../../hooks/useUser"
 
 export function RecruiterProfile({ editMode, setEditMode }: { editMode: boolean, setEditMode: Dispatch<SetStateAction<boolean>> }) {
     const { user, loading, getUser, updateUser } = useUser()
@@ -25,8 +25,12 @@ export function RecruiterProfile({ editMode, setEditMode }: { editMode: boolean,
     }
 
     useEffect(() => {
-        getUser()
-    }, [])
+        const fetchData = async () => {
+            await getUser()
+        }
+
+        fetchData()
+    }, [getUser])
 
     useEffect(() => {
         if (user) {

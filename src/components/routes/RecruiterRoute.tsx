@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom"
-import { useAuth } from "../../context/auth.context"
+import { useAuth } from "../../hooks/useAuth"
 
 export function RecruiterRoute() {
   const { user } = useAuth()

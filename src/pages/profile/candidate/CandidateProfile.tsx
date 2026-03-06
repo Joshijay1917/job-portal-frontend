@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form"
 import { InputField } from "../../../components/InputField"
-import { useUser } from "../../../context/user.context"
 import { useEffect, type Dispatch, type SetStateAction } from "react"
 import { Loader } from "../../../components/Loader"
 import type { CandidateForm } from "../../../types/context/user.context"
 import { File, FolderOpen, X } from "lucide-react"
+import { useUser } from "../../../hooks/useUser"
 
 export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean, setEditMode: Dispatch<SetStateAction<boolean>> }) {
   const { user, loading, getUser, updateUser } = useUser()
@@ -25,7 +25,11 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
   }
 
   useEffect(() => {
-    getUser()
+    const fetchData = async () => {
+      await getUser()
+    }
+
+    fetchData()
   }, [])
 
   useEffect(() => {
@@ -54,7 +58,7 @@ export function CandidateProfile({ editMode, setEditMode }: { editMode: boolean,
         {/* Email */}
         <InputField
           label="Email"
-          disabled
+          disabled={!editMode}
           register={register("email", {
             required: "Email required",
             pattern: {

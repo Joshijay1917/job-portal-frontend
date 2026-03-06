@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { useMemo } from "react"
-import { useAuth } from "../../context/auth.context"
 import { candidateMenu, recruiterMenu } from "./menu"
+import { useAuth } from "../../hooks/useAuth"
 
 
 export function DashboardTabs() {

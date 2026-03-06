@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import type { LoginFormValues, RegisterFormValues, User } from "../types/auth";
 import type { AuthContextType } from "../types/context/auth.context";
 import { logIn, logoutUser, register, userDetails } from "../lib/Apis/authApis";
@@ -6,18 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../Routes";
 import { asyncRunner } from "../utils/asyncRunner";
 import toast from "react-hot-toast";
+import { logger } from "../utils/logger";
 
-const AuthContext = createContext<AuthContextType | null>(null)
-
-export const useAuth = () => {
-    const context = useContext(AuthContext)
-
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-
-    return context;
-}
+export const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const navigate = useNavigate()
@@ -87,13 +78,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const user = res.data
             setUser(user)
             setIsAuthenticated(true)
-        } catch (error) {
+        } catch (error: unknown) {
+            logger.error(error)
             setIsAuthenticated(false)
         }
     }
 
     useEffect(() => {
-        restoreSession()
+        const initSession = async () => {
+            await restoreSession()
+        }
+
+        initSession()
     }, [])
 
     const values = {

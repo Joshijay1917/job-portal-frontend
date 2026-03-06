@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Status, type ApplicationType } from "../../../types/hooks/useRecruiter.d"
 import { Loader } from "../../../components/Loader"
 import { asyncRunner } from "../../../utils/asyncRunner"
@@ -25,7 +25,7 @@ export function Candidates() {
         setLoading(false)
     }
 
-    const getAllCandidates = async () => {
+    const getAllCandidates = useCallback(async () => {
         setLoading(true)
         const res = await asyncRunner(getAllApplicants())
 
@@ -37,7 +37,7 @@ export function Candidates() {
 
         setApplications(res.data.data)
         setLoading(false)
-    }
+    }, [])
 
     const getStatusStyle = (status: Status) => {
         switch (status) {
@@ -51,8 +51,12 @@ export function Candidates() {
     }
 
     useEffect(() => {
-        getAllCandidates()
-    }, [])
+        const fetchData = async () => {
+            await getAllCandidates()
+        }
+
+        fetchData()
+    }, [getAllCandidates])
 
     return (
         <div className='md:p-10 bg-gray-100'>

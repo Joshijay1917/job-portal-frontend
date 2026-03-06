@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { PanelLeftOpen } from 'lucide-react'
-import { useAuth } from '../context/auth.context'
 import { Logo } from './Logo'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../Routes'
 import Sidebar from './Sidebar'
+import { useAuth } from '../hooks/useAuth'
 
 const navLinks = [
     { label: "Home", to: ROUTES.HOME },
@@ -40,8 +40,8 @@ export function Navbar() {
                                 key={link.to}
                                 to={link.to}
                                 className={`relative px-4 py-5 text-sm font-medium transition-colors ${isActive(link.to)
-                                        ? 'text-blue-600'
-                                        : 'text-gray-600 hover:text-gray-900'
+                                    ? 'text-blue-600'
+                                    : 'text-gray-600 hover:text-gray-900'
                                     }`}
                             >
                                 {link.label}

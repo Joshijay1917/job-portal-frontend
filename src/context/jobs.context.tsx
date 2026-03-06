@@ -1,23 +1,13 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useCallback, useState, type ReactNode } from "react";
 import { ApplyJobPost, FilterJobs, getAllJobPosts, getJobData } from "../lib/Apis/jobApis";
 import type { JobListCardType } from "../types/context/Job.context";
 import type { FilterJobType, usePublicJobsType } from "../types/hooks/useJobs";
 import { scrollToTop } from "../utils/scrollToTop";
 import { asyncRunner } from "../utils/asyncRunner";
 import toast from "react-hot-toast";
-import { useAuth } from "./auth.context";
+import { useAuth } from "../hooks/useAuth";
 
-const JobsContext = createContext<usePublicJobsType | null>(null)
-
-export const useJobs = () => {
-    const context = useContext(JobsContext)
-
-    if (!context) {
-        throw new Error('useJobs must be used within a JobsProvider');
-    }
-
-    return context;
-}
+export const JobsContext = createContext<usePublicJobsType | null>(null)
 
 export const JobsProvider = ({ children }: { children: ReactNode }) => {
     const { user } = useAuth()
@@ -27,7 +17,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
     const [totalPages, setTotalPages] = useState<number>(0);
     const [page, setPage] = useState<number>(1);
 
-    const getAllJobs = async (p: number) => {
+    const getAllJobs = useCallback(async (p: number) => {
         setJobs([])
         setLoading(true)
         scrollToTop()
@@ -41,7 +31,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
         setTotalPages(res.data.data.totalPages);
         setJobs(res.data.data.posts);
         setLoading(false)
-    };
+    }, [])
 
     const getJobDetails = async (id: string) => {
         setLoading(true)
@@ -58,7 +48,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
         return payload
     }
 
-    const filterJobPosts = async (filters: FilterJobType, pageNo: number) => {
+    const filterJobPosts = useCallback(async (filters: FilterJobType, pageNo: number) => {
         setJobs([])
         setLoading(true)
         scrollToTop()
@@ -73,7 +63,7 @@ export const JobsProvider = ({ children }: { children: ReactNode }) => {
         setTotalPages(res.data.data.totalPages);
         setJobs(res.data.data.posts);
         setLoading(false)
-    };
+    }, []);
 
     const goTo = (p: number) => {
         if (p < 1 || p > totalPages) return;

@@ -1,17 +1,20 @@
 import { BookCheck, Calendar, Clock, IndianRupee } from "lucide-react"
-import { useJobs } from "../../../context/jobs.context"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Loader } from "../../../components/Loader"
-import { formatDate } from "../../../utils/formatDate"
 import { Retry } from "../../../components/Retry"
+import { ROUTES } from "../../../Routes"
+import { useJobs } from "../../../hooks/useJobs"
+import { formatDate } from "../../../utils/formatDate"
 
 export function LatestJobs() {
     const { jobs, loading, error, getAllJobs, applyJobPost } = useJobs()
     const [applyingJobId, setApplyingJobId] = useState<string | null>(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         getAllJobs(1)
-    }, [])
+    }, [getAllJobs])
 
     const handleApply = async (jobId: string) => {
         setApplyingJobId(jobId)
@@ -28,8 +31,8 @@ export function LatestJobs() {
 
                 <div className='flex flex-col gap-4'>
                     {!loading && error && <Retry onRetry={() => getAllJobs(1)} />}
-                    {loading ? <Loader /> : jobs && jobs.slice(5).map((job) => (
-                        <div key={job._id} className='bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 p-5 md:p-6'>
+                    {loading ? <Loader /> : jobs && jobs.slice(0, 5).map((job) => (
+                        <div key={job._id} onClick={() => navigate(ROUTES.JOB_DETAIL(job._id))} className='bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 p-5 md:p-6'>
                             <div className='flex flex-col gap-1 mb-4 pb-3 border-b border-gray-100'>
                                 <h3 className='text-xl md:text-2xl font-bold'>{job.title}</h3>
                                 <p className='text-gray-500 text-sm'>{job.recruiterId.cname}</p>

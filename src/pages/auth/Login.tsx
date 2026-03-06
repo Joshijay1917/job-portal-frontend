@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 import { Eye, EyeOff } from "lucide-react"
 import type { LoginFormValues } from "../../types/auth"
-import { useAuth } from "../../context/auth.context"
 import { ROUTES } from "../../Routes"
+import { useAuth } from "../../hooks/useAuth"
 
 export function Login() {
   const navigate = useNavigate()
@@ -25,7 +25,7 @@ export function Login() {
     if (isAuthenticated) {
       navigate(ROUTES.HOME)
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, navigate])
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-linear-to-br from-gray-100 to-gray-200 px-4">

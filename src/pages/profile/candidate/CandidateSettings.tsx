@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Lock, Trash2, Eye, EyeOff, User, Mail, Shield } from "lucide-react"
-import { useAuth } from "../../../context/auth.context"
-import { useUser } from "../../../context/user.context"
+import { useAuth } from "../../../hooks/useAuth"
+import { useUser } from "../../../hooks/useUser"
 
 export function CandidateSettings() {
     const { logOutUser, user } = useAuth()
