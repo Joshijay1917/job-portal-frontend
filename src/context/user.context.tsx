@@ -32,12 +32,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         if (!res || !res.data) {
             toast.error(res.error)
             setLoading(false)
-            return false;
+            return null;
         }
 
         toast.success('Profile updated!')
         setLoading(false)
-        return true
+        return res.data.data
     }
 
     const changePassword = async (currentPass: string, newPass: string) => {

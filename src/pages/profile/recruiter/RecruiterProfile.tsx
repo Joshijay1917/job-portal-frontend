@@ -20,6 +20,7 @@ export function RecruiterProfile({ editMode, setEditMode }: { editMode: boolean,
     const onSubmit = async (data: RecruiterForm) => {
         const res = await updateUser(data)
         if (res) {
+            reset(res)
             setEditMode(false)
         }
     }
@@ -40,7 +41,11 @@ export function RecruiterProfile({ editMode, setEditMode }: { editMode: boolean,
 
     return loading ? <Loader /> : (
         <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-10">
-            <h2 className="text-xl md:text-2xl font-bold mb-6">Company Profile</h2>
+            <div className="flex flex-wrap h-full items-center gap-2 mb-6">
+                <h2 className="text-xl md:text-2xl font-bold">Company Profile</h2>
+                {!user?.profile_completed && <div className="flex items-center gap-2"><span className='text-sm text-gray-400'>•</span>
+                    <p className='text-sm bg-red-400/10 rounded-xl p-1 px-1.5 text-red-400'>Profile not completed!</p></div>}
+            </div>
 
             <form
                 onSubmit={handleSubmit(onSubmit)}

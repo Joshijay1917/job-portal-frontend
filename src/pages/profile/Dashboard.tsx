@@ -27,7 +27,7 @@ export function Dashboard() {
                     <img className='w-16 h-16 md:w-24 md:h-24 rounded-full ring-2 ring-gray-200 object-cover' src="/profile.png" alt="profile_image" />
                     <div>
                         <h1 className='text-2xl md:text-4xl font-bold'>Profile</h1>
-                        <div className='flex items-center gap-2 mt-1'>
+                        <div className='flex flex-wrap items-center gap-2 mt-1'>
                             <span className='text-xs font-medium bg-blue-50 text-blue-600 px-2.5 py-0.5 rounded-full'>{user?.role.toUpperCase()}</span>
                             <span className='text-sm text-gray-400'>•</span>
                             <p className='text-sm text-gray-500'>{user?.email}</p>

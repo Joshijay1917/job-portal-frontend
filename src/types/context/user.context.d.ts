@@ -4,7 +4,7 @@ import type { Recruiter } from "../dashboard/recruiter"
 export type userContextType = {
     user?: Recruiter | Candidate
     getUser: () => Promise<void>
-    updateUser: (user: RecruiterForm | CandidateForm) => Promise<boolean>
+    updateUser: (user: RecruiterForm | CandidateForm) => Promise<null | RecruiterForm | CandidateForm>
     changePassword: (currentPass: string, newPass: string) => Promise<boolean>
     loading: boolean
 }
